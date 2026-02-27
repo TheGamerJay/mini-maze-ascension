@@ -4,17 +4,34 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mini Maze: Ascension</title>
-  <style>
-    body{margin:0;background:#0f1115;color:#fff;font-family:system-ui}
-    #hud{position:fixed;top:12px;left:12px;background:rgba(0,0,0,.55);padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12)}
-    canvas{display:block}
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="hud">
-    <div style="font-weight:800;letter-spacing:1px">MINI MAZE: ASCENSION</div>
-    <div id="info" style="opacity:.9;font-size:13px;margin-top:6px">Loading…</div>
+  <div id="ui">
+    <div class="title">MINI MAZE: ASCENSION</div>
+
+    <div class="row">
+      <input id="name" maxlength="24" placeholder="Name (for leaderboard)" />
+      <button id="start">Start Run</button>
+      <button id="finish" disabled>End Run (Submit)</button>
+    </div>
+
+    <div class="stats">
+      <div>Run: <span id="runId">-</span></div>
+      <div>Level: <span id="level">1</span></div>
+      <div>Score: <span id="score">0</span></div>
+      <div>Bosses: <span id="bosses">0</span></div>
+    </div>
+
+    <div class="row">
+      <button id="levelUp" disabled>Simulate Level Clear</button>
+      <button id="bossKill" disabled>Simulate Boss Kill</button>
+      <button id="refreshLB">Refresh Leaderboard</button>
+    </div>
+
+    <pre id="lb"></pre>
   </div>
+
   <canvas id="c"></canvas>
   <script src="game.js"></script>
 </body>
