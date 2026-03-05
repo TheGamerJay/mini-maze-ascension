@@ -420,35 +420,35 @@ const ArcadeContent = () => {
           </div>
 
           {/* Player Card */}
-          <div className="glass-card p-6 mb-8">
-            <div className="flex flex-col md:flex-row md:items-center gap-6">
+          <div className="glass-card p-4 sm:p-6 mb-8">
+            <div className="flex flex-col gap-4">
               {/* Avatar & Info */}
-              <div className="flex items-center gap-4 flex-1">
-                <div className="relative">
+              <div className="flex items-center gap-4">
+                <div className="relative flex-shrink-0">
                   {playerProfile.useCustomImage && playerProfile.customImage ? (
-                    <img src={playerProfile.customImage} alt="Profile" className="w-16 h-16 rounded-2xl object-cover ring-2 ring-purple-500/50" />
+                    <img src={playerProfile.customImage} alt="Profile" className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl object-cover ring-2 ring-purple-500/50" />
                   ) : (
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 flex items-center justify-center text-3xl ring-2 ring-purple-500/50">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 flex items-center justify-center text-2xl sm:text-3xl ring-2 ring-purple-500/50">
                       {playerProfile.avatar}
                     </div>
                   )}
-                  <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-lg flex items-center justify-center text-xs" style={{ backgroundColor: playerRank.color }}>
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-lg flex items-center justify-center text-xs" style={{ backgroundColor: playerRank.color }}>
                     <playerRank.icon className="w-3 h-3 text-black" />
                   </div>
                 </div>
-                <div>
+                <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-lg font-bold text-white">{playerProfile.name}</span>
-                    <span className="text-sm">{playerProfile.country}</span>
+                    <span className="text-base sm:text-lg font-bold text-white truncate">{playerProfile.name}</span>
+                    <span className="text-sm flex-shrink-0">{playerProfile.country}</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-xs font-semibold px-2 py-0.5 rounded-md" style={{ backgroundColor: `${playerRank.color}20`, color: playerRank.color }}>
                       {playerRank.name}
                     </span>
                     <span className="text-xs text-white/50">{totalScore.toLocaleString()} pts</span>
                   </div>
                   {nextRank && (
-                    <div className="mt-2 w-48">
+                    <div className="mt-2 max-w-[200px]">
                       <div className="progress-bar">
                         <div className="progress-fill bg-gradient-to-r from-purple-500 to-cyan-500" style={{ width: `${progressToNext}%` }} />
                       </div>
@@ -458,27 +458,27 @@ const ArcadeContent = () => {
                 </div>
               </div>
 
-              {/* Stats */}
-              <div className="flex gap-4">
-                <div className="stat-card min-w-[100px]">
-                  <Trophy className="w-5 h-5 text-yellow-500 mx-auto mb-1" />
-                  <p className="stat-value gradient-text-gold">{totalScore.toLocaleString()}</p>
-                  <p className="text-[10px] text-white/40">Total Score</p>
+              {/* Stats - Scrollable on mobile */}
+              <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
+                <div className="stat-card min-w-[80px] sm:min-w-[90px] flex-shrink-0">
+                  <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 mx-auto mb-1" />
+                  <p className="stat-value text-base sm:text-lg gradient-text-gold">{totalScore.toLocaleString()}</p>
+                  <p className="text-[9px] sm:text-[10px] text-white/40">Total Score</p>
                 </div>
-                <div className="stat-card min-w-[100px]">
-                  <Gamepad2 className="w-5 h-5 text-cyan-500 mx-auto mb-1" />
-                  <p className="stat-value text-cyan-400">{gamesPlayed}/{games.length}</p>
-                  <p className="text-[10px] text-white/40">Played</p>
+                <div className="stat-card min-w-[80px] sm:min-w-[90px] flex-shrink-0">
+                  <Gamepad2 className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-500 mx-auto mb-1" />
+                  <p className="stat-value text-base sm:text-lg text-cyan-400">{gamesPlayed}/{games.length}</p>
+                  <p className="text-[9px] sm:text-[10px] text-white/40">Played</p>
                 </div>
-                <div className="stat-card min-w-[100px]">
-                  <Flame className="w-5 h-5 text-orange-500 mx-auto mb-1" />
-                  <p className="stat-value text-orange-400">{streak}</p>
-                  <p className="text-[10px] text-white/40">Day Streak</p>
+                <div className="stat-card min-w-[80px] sm:min-w-[90px] flex-shrink-0">
+                  <Flame className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 mx-auto mb-1" />
+                  <p className="stat-value text-base sm:text-lg text-orange-400">{streak}</p>
+                  <p className="text-[9px] sm:text-[10px] text-white/40">Day Streak</p>
                 </div>
-                <div className="stat-card min-w-[100px]">
-                  <TrendingUp className="w-5 h-5 text-green-500 mx-auto mb-1" />
-                  <p className="stat-value text-green-400">#{Math.max(1, 21 - Math.floor(totalScore / 5000))}</p>
-                  <p className="text-[10px] text-white/40">Rank</p>
+                <div className="stat-card min-w-[80px] sm:min-w-[90px] flex-shrink-0">
+                  <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mx-auto mb-1" />
+                  <p className="stat-value text-base sm:text-lg text-green-400">#{Math.max(1, 21 - Math.floor(totalScore / 5000))}</p>
+                  <p className="text-[9px] sm:text-[10px] text-white/40">Rank</p>
                 </div>
               </div>
             </div>
