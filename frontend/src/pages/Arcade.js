@@ -246,7 +246,7 @@ const Arcade = () => {
       {/* Footer */}
       <footer className="text-center py-6 text-[8px] text-[#666]">
         <p>USE ARROW KEYS, MOUSE, OR TOUCH TO PLAY</p>
-        <p className="mt-2">© 2025 MINI RETRO ARCADE • {games.length} GAMES</p>
+        <p className="mt-2">© 2026 MINI RETRO ARCADE • {games.length} GAMES</p>
       </footer>
     </div>
   );
