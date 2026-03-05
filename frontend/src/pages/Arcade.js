@@ -31,7 +31,8 @@ import RockPaperScissors from '../games/RockPaperScissors';
 import CatchGame from '../games/CatchGame';
 import QuizGame from '../games/QuizGame';
 import ClickerGame from '../games/ClickerGame';
-import { Gamepad2, Trophy, Volume2, VolumeX, ArrowLeft, Star, Zap, Brain, MessageSquare, Users, Sparkles } from 'lucide-react';
+import { Gamepad2, Trophy, Volume2, VolumeX, ArrowLeft, Star, Zap, Brain, MessageSquare, Users, Sparkles, Crown, Medal, Flame } from 'lucide-react';
+import Leaderboard from '../components/Leaderboard';
 
 const categories = [
   { id: 'all', name: 'ALL GAMES', icon: Sparkles, color: '#ff00ff' },
@@ -93,6 +94,11 @@ const Arcade = () => {
   const [showScores, setShowScores] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [heroIndex, setHeroIndex] = useState(0);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [playerProfile, setPlayerProfile] = useState(() => {
+    const saved = localStorage.getItem('miniArcadeProfile');
+    return saved ? JSON.parse(saved) : { name: 'Player1', avatar: '🎮', country: '🌍' };
+  });
 
   const featuredGames = games.filter(g => g.featured);
 
@@ -173,6 +179,29 @@ const Arcade = () => {
   const totalScore = Object.values(highScores).reduce((a, b) => a + b, 0);
   const gamesPlayed = Object.keys(highScores).length;
 
+  // Calculate player rank
+  const RANKS = [
+    { name: 'BRONZE', min: 0, color: '#CD7F32', icon: Medal },
+    { name: 'SILVER', min: 10000, color: '#C0C0C0', icon: Medal },
+    { name: 'GOLD', min: 50000, color: '#FFD700', icon: Trophy },
+    { name: 'PLATINUM', min: 100000, color: '#E5E4E2', icon: Crown },
+    { name: 'DIAMOND', min: 200000, color: '#B9F2FF', icon: Crown },
+    { name: 'LEGEND', min: 500000, color: '#FF00FF', icon: Star },
+  ];
+
+  const getRank = (score) => {
+    for (let i = RANKS.length - 1; i >= 0; i--) {
+      if (score >= RANKS[i].min) return RANKS[i];
+    }
+    return RANKS[0];
+  };
+
+  const playerRank = getRank(totalScore);
+  const nextRank = RANKS[RANKS.indexOf(playerRank) + 1];
+  const progressToNext = nextRank 
+    ? ((totalScore - playerRank.min) / (nextRank.min - playerRank.min)) * 100 
+    : 100;
+
   if (currentGame) {
     const game = games.find(g => g.id === currentGame);
     return (
@@ -229,27 +258,77 @@ const Arcade = () => {
             <Gamepad2 className="w-10 h-10 text-[#00ffff] animate-bounce" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
           </div>
           
-          <p className="text-[#888] text-sm tracking-widest mb-4">
-            {games.length} CLASSIC GAMES • FREE TO PLAY
+          <p className="text-[#888] text-sm tracking-widest mb-6">
+            {games.length} CLASSIC GAMES • COMPETE GLOBALLY
           </p>
 
-          {/* Stats Bar */}
-          <div className="flex justify-center gap-6 mb-6">
-            <div className="bg-black/50 border border-[#00ff00] rounded-lg px-4 py-2">
-              <p className="text-[#00ff00] text-xl font-bold">{totalScore.toLocaleString()}</p>
-              <p className="text-[8px] text-[#888]">TOTAL SCORE</p>
+          {/* Player Stats Card */}
+          <div className="max-w-md mx-auto mb-6">
+            <div className="bg-gradient-to-r from-[#1a0a2e] via-[#2a1a4e] to-[#1a0a2e] rounded-xl p-4 border-2 border-[#ff00ff] relative overflow-hidden">
+              {/* Animated background */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 animate-shimmer" />
+              
+              <div className="relative flex items-center gap-4">
+                {/* Player Avatar */}
+                <div className="relative">
+                  <div className="w-14 h-14 rounded-full bg-black/50 flex items-center justify-center text-3xl border-2" 
+                    style={{ borderColor: playerRank.color }}>
+                    {playerProfile.avatar}
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: playerRank.color }}>
+                    <playerRank.icon className="w-3 h-3 text-black" />
+                  </div>
+                </div>
+
+                {/* Player Info */}
+                <div className="flex-1 text-left">
+                  <div className="flex items-center gap-2">
+                    <span className="text-white font-bold">{playerProfile.name}</span>
+                    <span className="text-xs" style={{ color: playerRank.color }}>{playerRank.name}</span>
+                  </div>
+                  <p className="text-[#00ff00] text-xl font-mono font-bold">{totalScore.toLocaleString()}</p>
+                  
+                  {/* Progress Bar */}
+                  {nextRank && (
+                    <div className="mt-1">
+                      <div className="h-1.5 bg-black/50 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full transition-all duration-500"
+                          style={{ 
+                            width: `${Math.min(100, progressToNext)}%`,
+                            background: `linear-gradient(to right, ${playerRank.color}, ${nextRank.color})`
+                          }}
+                        />
+                      </div>
+                      <p className="text-[8px] text-[#888] mt-0.5">
+                        {(nextRank.min - totalScore).toLocaleString()} to {nextRank.name}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Quick Stats */}
+                <div className="text-right space-y-1">
+                  <div className="bg-black/30 rounded px-2 py-1">
+                    <p className="text-[#ffff00] text-sm font-bold">{gamesPlayed}/{games.length}</p>
+                    <p className="text-[6px] text-[#888]">PLAYED</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Leaderboard Button */}
+              <button 
+                onClick={() => setShowLeaderboard(true)}
+                className="w-full mt-3 py-2 bg-gradient-to-r from-[#ff00ff]/30 to-[#00ffff]/30 rounded-lg 
+                  border border-[#ff00ff]/50 flex items-center justify-center gap-2 hover:scale-105 transition-transform"
+                data-testid="open-leaderboard-btn"
+              >
+                <Trophy className="w-4 h-4 text-[#ffff00]" />
+                <span className="text-[#ffff00] text-xs font-bold">VIEW GLOBAL LEADERBOARD</span>
+                <Flame className="w-4 h-4 text-[#ff8800]" />
+              </button>
             </div>
-            <div className="bg-black/50 border border-[#ffff00] rounded-lg px-4 py-2">
-              <p className="text-[#ffff00] text-xl font-bold">{gamesPlayed}/{games.length}</p>
-              <p className="text-[8px] text-[#888]">GAMES PLAYED</p>
-            </div>
-            <button 
-              onClick={() => setShowScores(true)}
-              className="bg-black/50 border border-[#ff00ff] rounded-lg px-4 py-2 hover:bg-[#ff00ff]/20 transition-all"
-            >
-              <Trophy className="w-6 h-6 text-[#ff00ff] mx-auto" />
-              <p className="text-[8px] text-[#888]">LEADERBOARD</p>
-            </button>
           </div>
 
           {/* Featured Game Carousel */}
@@ -326,6 +405,16 @@ const Arcade = () => {
           </div>
         </div>
       </div>
+
+      {/* Leaderboard */}
+      {showLeaderboard && (
+        <Leaderboard 
+          playerScore={totalScore}
+          gamesPlayed={gamesPlayed}
+          highScores={highScores}
+          onClose={() => setShowLeaderboard(false)}
+        />
+      )}
 
       {/* High Scores Modal */}
       {showScores && (

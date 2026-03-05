@@ -151,3 +151,29 @@ canvas {
 .pulse {
   animation: pulse 2s ease-in-out infinite;
 }
+
+
+/* Shimmer animation for cards */
+@keyframes shimmer {
+  0% { transform: translateX(-100%) skewX(-12deg); }
+  100% { transform: translateX(200%) skewX(-12deg); }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Hide scrollbar for category tabs */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Glow on hover */
+.glow-hover:hover {
+  box-shadow: 0 0 20px var(--glow-color, #ff00ff);
+}
