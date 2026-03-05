@@ -33,64 +33,64 @@ import QuizGame from '../games/QuizGame';
 import ClickerGame from '../games/ClickerGame';
 import MazeAscension from '../games/MazeAscension';
 import Wrecker from '../games/Wrecker';
-import { Gamepad2, Trophy, Volume2, VolumeX, ArrowLeft, Star, Zap, Brain, MessageSquare, Users, Sparkles, Crown, Medal, Flame, User, Home } from 'lucide-react';
+import { Gamepad2, Trophy, ArrowLeft, Zap, Brain, MessageSquare, Users, Star, Sparkles, Crown, Medal, Flame, User, Home, TrendingUp, Play } from 'lucide-react';
 import Leaderboard from '../components/Leaderboard';
 import ProfilePage from '../components/ProfilePage';
 import Dashboard from '../components/Dashboard';
 
 const categories = [
-  { id: 'all', name: 'ALL GAMES', icon: Sparkles, color: '#ff00ff' },
-  { id: 'action', name: 'ACTION', icon: Zap, color: '#ff0000' },
-  { id: 'puzzle', name: 'PUZZLE', icon: Brain, color: '#00ffff' },
-  { id: 'word', name: 'WORD', icon: MessageSquare, color: '#00ff00' },
-  { id: 'strategy', name: 'STRATEGY', icon: Users, color: '#ffff00' },
-  { id: 'casual', name: 'CASUAL', icon: Star, color: '#ff8800' },
+  { id: 'all', name: 'All Games', icon: Sparkles, color: '#8b5cf6' },
+  { id: 'action', name: 'Action', icon: Zap, color: '#ef4444' },
+  { id: 'puzzle', name: 'Puzzle', icon: Brain, color: '#06b6d4' },
+  { id: 'word', name: 'Word', icon: MessageSquare, color: '#10b981' },
+  { id: 'strategy', name: 'Strategy', icon: Users, color: '#f59e0b' },
+  { id: 'casual', name: 'Casual', icon: Star, color: '#ec4899' },
 ];
 
 const games = [
   // Action Games
-  { id: 'snake', name: 'SNAKE', color: '#00ff00', icon: '🐍', desc: 'Eat & Grow!', category: 'action', featured: true },
-  { id: 'tetris', name: 'TETRIS', color: '#00ffff', icon: '🧱', desc: 'Stack Blocks!', category: 'action', featured: true },
-  { id: 'breakout', name: 'BREAKOUT', color: '#ff00ff', icon: '🎾', desc: 'Break Bricks!', category: 'action' },
-  { id: 'invaders', name: 'INVADERS', color: '#ff0000', icon: '👾', desc: 'Alien Attack!', category: 'action', featured: true },
-  { id: 'pong', name: 'PONG', color: '#ffff00', icon: '🏓', desc: 'Classic Tennis!', category: 'action' },
-  { id: 'flappy', name: 'FLAPPY', color: '#ff8800', icon: '🐦', desc: 'Fly High!', category: 'action' },
-  { id: 'dino', name: 'DINO RUN', color: '#00ff00', icon: '🦖', desc: 'Jump & Run!', category: 'action' },
-  { id: 'asteroids', name: 'ASTEROIDS', color: '#00ffff', icon: '☄️', desc: 'Shoot Rocks!', category: 'action' },
-  { id: 'whack', name: 'WHACK', color: '#8B4513', icon: '🐹', desc: 'Hit Moles!', category: 'action' },
-  { id: 'mazeascension', name: 'MAZE ASCENSION', color: '#00ff00', icon: '🧟', desc: 'Zombie Maze!', category: 'action', featured: true },
-  { id: 'wrecker', name: 'WRECKER', color: '#ff0000', icon: '🦖', desc: 'Smash City!', category: 'action', featured: true },
+  { id: 'snake', name: 'Snake', color: '#10b981', icon: '🐍', desc: 'Classic snake game', category: 'action', featured: true },
+  { id: 'tetris', name: 'Tetris', color: '#06b6d4', icon: '🧱', desc: 'Stack the blocks', category: 'action', featured: true },
+  { id: 'breakout', name: 'Breakout', color: '#8b5cf6', icon: '🎾', desc: 'Break all bricks', category: 'action' },
+  { id: 'invaders', name: 'Space Invaders', color: '#ef4444', icon: '👾', desc: 'Defend Earth', category: 'action', featured: true },
+  { id: 'pong', name: 'Pong', color: '#f59e0b', icon: '🏓', desc: 'Classic tennis', category: 'action' },
+  { id: 'flappy', name: 'Flappy Bird', color: '#f97316', icon: '🐦', desc: 'Dodge the pipes', category: 'action' },
+  { id: 'dino', name: 'T-Rex Run', color: '#10b981', icon: '🦖', desc: 'Endless runner', category: 'action' },
+  { id: 'asteroids', name: 'Asteroids', color: '#06b6d4', icon: '☄️', desc: 'Shoot space rocks', category: 'action' },
+  { id: 'whack', name: 'Whack-a-Mole', color: '#92400e', icon: '🐹', desc: 'Test your reflexes', category: 'action' },
+  { id: 'mazeascension', name: 'Maze Ascension', color: '#10b981', icon: '🧟', desc: 'Zombie survival', category: 'action', featured: true },
+  { id: 'wrecker', name: 'Wrecker', color: '#ef4444', icon: '🦖', desc: 'Destroy the city', category: 'action', featured: true },
   
   // Puzzle Games
-  { id: '2048', name: '2048', color: '#ff6600', icon: '🔢', desc: 'Merge Numbers!', category: 'puzzle', featured: true },
-  { id: 'minesweeper', name: 'MINES', color: '#ff0000', icon: '💣', desc: 'Avoid Bombs!', category: 'puzzle' },
-  { id: 'maze', name: 'MAZE', color: '#00ffff', icon: '🔷', desc: 'Find Exit!', category: 'puzzle' },
-  { id: 'sliding', name: 'SLIDER', color: '#ff00ff', icon: '🔲', desc: 'Slide Tiles!', category: 'puzzle' },
-  { id: 'sudoku', name: 'SUDOKU', color: '#00ff00', icon: '9️⃣', desc: 'Fill Numbers!', category: 'puzzle' },
-  { id: 'riddle', name: 'RIDDLES', color: '#ff00ff', icon: '🧩', desc: 'Brain Teasers!', category: 'puzzle' },
+  { id: '2048', name: '2048', color: '#f97316', icon: '🔢', desc: 'Merge to win', category: 'puzzle', featured: true },
+  { id: 'minesweeper', name: 'Minesweeper', color: '#ef4444', icon: '💣', desc: 'Avoid the bombs', category: 'puzzle' },
+  { id: 'maze', name: 'Maze Runner', color: '#06b6d4', icon: '🔷', desc: 'Find the exit', category: 'puzzle' },
+  { id: 'sliding', name: 'Slide Puzzle', color: '#8b5cf6', icon: '🔲', desc: 'Arrange tiles', category: 'puzzle' },
+  { id: 'sudoku', name: 'Sudoku', color: '#10b981', icon: '9️⃣', desc: 'Number puzzle', category: 'puzzle' },
+  { id: 'riddle', name: 'Riddles', color: '#ec4899', icon: '🧩', desc: 'Brain teasers', category: 'puzzle' },
   
   // Word Games
-  { id: 'wordle', name: 'WORDLE', color: '#00ff00', icon: '📝', desc: 'Guess Word!', category: 'word', featured: true },
-  { id: 'wordsearch', name: 'SEARCH', color: '#ffff00', icon: '🔍', desc: 'Find Words!', category: 'word' },
-  { id: 'wordfinder', name: 'FINDER', color: '#ff8800', icon: '🔤', desc: 'Unscramble!', category: 'word' },
-  { id: 'crossword', name: 'CROSS', color: '#00ffff', icon: '✏️', desc: 'Fill Clues!', category: 'word' },
-  { id: 'hangman', name: 'HANGMAN', color: '#ff0000', icon: '🎭', desc: 'Save Him!', category: 'word' },
-  { id: 'typing', name: 'TYPING', color: '#00ff00', icon: '⌨️', desc: 'Speed Type!', category: 'word' },
+  { id: 'wordle', name: 'Wordle', color: '#10b981', icon: '📝', desc: 'Guess the word', category: 'word', featured: true },
+  { id: 'wordsearch', name: 'Word Search', color: '#f59e0b', icon: '🔍', desc: 'Find hidden words', category: 'word' },
+  { id: 'wordfinder', name: 'Word Finder', color: '#f97316', icon: '🔤', desc: 'Unscramble letters', category: 'word' },
+  { id: 'crossword', name: 'Crossword', color: '#06b6d4', icon: '✏️', desc: 'Fill the clues', category: 'word' },
+  { id: 'hangman', name: 'Hangman', color: '#ef4444', icon: '🎭', desc: 'Save the man', category: 'word' },
+  { id: 'typing', name: 'Speed Typing', color: '#10b981', icon: '⌨️', desc: 'Type fast', category: 'word' },
   
   // Strategy Games
-  { id: 'tictactoe', name: 'TIC TAC', color: '#ff00ff', icon: '⭕', desc: 'Beat the AI!', category: 'strategy' },
-  { id: 'connect4', name: 'CONNECT 4', color: '#ff0000', icon: '🔴', desc: 'Line Em Up!', category: 'strategy' },
-  { id: 'memory', name: 'MEMORY', color: '#9900ff', icon: '🧠', desc: 'Match Pairs!', category: 'strategy' },
-  { id: 'simon', name: 'SIMON', color: '#ffff00', icon: '🎵', desc: 'Repeat Pattern!', category: 'strategy' },
+  { id: 'tictactoe', name: 'Tic Tac Toe', color: '#8b5cf6', icon: '⭕', desc: 'Beat the AI', category: 'strategy' },
+  { id: 'connect4', name: 'Connect Four', color: '#ef4444', icon: '🔴', desc: 'Line up four', category: 'strategy' },
+  { id: 'memory', name: 'Memory Match', color: '#a855f7', icon: '🧠', desc: 'Find pairs', category: 'strategy' },
+  { id: 'simon', name: 'Simon Says', color: '#f59e0b', icon: '🎵', desc: 'Follow pattern', category: 'strategy' },
   
   // Casual Games
-  { id: 'bubblepop', name: 'BUBBLES', color: '#00ffff', icon: '🫧', desc: 'Pop Them!', category: 'casual', featured: true },
-  { id: 'rps', name: 'RPS', color: '#ff8800', icon: '✊', desc: 'Rock Paper!', category: 'casual' },
-  { id: 'catch', name: 'CATCH', color: '#ffff00', icon: '🧺', desc: 'Catch Items!', category: 'casual' },
-  { id: 'quiz', name: 'QUIZ', color: '#ff00ff', icon: '❓', desc: 'Test Brain!', category: 'casual' },
-  { id: 'clicker', name: 'CLICKER', color: '#00ff00', icon: '👆', desc: 'Click Away!', category: 'casual' },
-  { id: 'reaction', name: 'REACTION', color: '#ff00ff', icon: '⚡', desc: 'Quick Tap!', category: 'casual' },
-  { id: 'colormatch', name: 'COLORS', color: '#ff00ff', icon: '🎨', desc: 'Match Names!', category: 'casual' },
+  { id: 'bubblepop', name: 'Bubble Pop', color: '#06b6d4', icon: '🫧', desc: 'Pop bubbles', category: 'casual', featured: true },
+  { id: 'rps', name: 'Rock Paper Scissors', color: '#f97316', icon: '✊', desc: 'Classic game', category: 'casual' },
+  { id: 'catch', name: 'Catch Game', color: '#f59e0b', icon: '🧺', desc: 'Catch items', category: 'casual' },
+  { id: 'quiz', name: 'Quiz Master', color: '#8b5cf6', icon: '❓', desc: 'Test knowledge', category: 'casual' },
+  { id: 'clicker', name: 'Clicker', color: '#10b981', icon: '👆', desc: 'Click to win', category: 'casual' },
+  { id: 'reaction', name: 'Reaction Test', color: '#ec4899', icon: '⚡', desc: 'How fast?', category: 'casual' },
+  { id: 'colormatch', name: 'Color Match', color: '#8b5cf6', icon: '🎨', desc: 'Match colors', category: 'casual' },
 ];
 
 const Arcade = () => {
@@ -99,42 +99,27 @@ const Arcade = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showScores, setShowScores] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [heroIndex, setHeroIndex] = useState(0);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const [playerProfile, setPlayerProfile] = useState(() => {
     const saved = localStorage.getItem('miniArcadeProfile');
-    return saved ? JSON.parse(saved) : { name: 'Player1', avatar: '🎮', country: '🌍' };
+    return saved ? JSON.parse(saved) : { name: 'Player', avatar: '🎮', country: '🌍' };
   });
 
   const featuredGames = games.filter(g => g.featured);
 
   useEffect(() => {
     const saved = localStorage.getItem('miniRetroArcadeScores');
-    if (saved) {
-      setHighScores(JSON.parse(saved));
-    }
+    if (saved) setHighScores(JSON.parse(saved));
   }, []);
 
-  // Rotate featured games
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setHeroIndex(i => (i + 1) % featuredGames.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [featuredGames.length]);
-
   const updateHighScore = (gameId, score) => {
-    // Track recent games
     const recent = JSON.parse(localStorage.getItem('miniArcadeRecentGames') || '[]');
     const updatedRecent = [gameId, ...recent.filter(id => id !== gameId)].slice(0, 10);
     localStorage.setItem('miniArcadeRecentGames', JSON.stringify(updatedRecent));
-
-    // Update session count
     const sessions = parseInt(localStorage.getItem('miniArcadeSessions') || '0') + 1;
     localStorage.setItem('miniArcadeSessions', sessions.toString());
-
     const current = highScores[gameId] || 0;
     if (score > current) {
       const newScores = { ...highScores, [gameId]: score };
@@ -145,13 +130,35 @@ const Arcade = () => {
     return false;
   };
 
+  const RANKS = [
+    { name: 'Bronze', min: 0, color: '#CD7F32', icon: Medal },
+    { name: 'Silver', min: 10000, color: '#C0C0C0', icon: Medal },
+    { name: 'Gold', min: 50000, color: '#FFD700', icon: Trophy },
+    { name: 'Platinum', min: 100000, color: '#E5E4E2', icon: Crown },
+    { name: 'Diamond', min: 200000, color: '#B9F2FF', icon: Crown },
+    { name: 'Legend', min: 500000, color: '#8b5cf6', icon: Star },
+  ];
+
+  const getRank = (score) => {
+    for (let i = RANKS.length - 1; i >= 0; i--) {
+      if (score >= RANKS[i].min) return RANKS[i];
+    }
+    return RANKS[0];
+  };
+
+  const filteredGames = selectedCategory === 'all' ? games : games.filter(g => g.category === selectedCategory);
+  const totalScore = Object.values(highScores).reduce((a, b) => a + b, 0);
+  const gamesPlayed = Object.keys(highScores).length;
+  const playerRank = getRank(totalScore);
+  const nextRank = RANKS[RANKS.indexOf(playerRank) + 1];
+  const progressToNext = nextRank ? ((totalScore - playerRank.min) / (nextRank.min - playerRank.min)) * 100 : 100;
+
   const renderGame = () => {
     const props = { 
       onScore: (score) => updateHighScore(currentGame, score),
       highScore: highScores[currentGame] || 0,
       soundEnabled 
     };
-
     switch (currentGame) {
       case 'snake': return <SnakeGame {...props} />;
       case 'tetris': return <TetrisGame {...props} />;
@@ -191,262 +198,190 @@ const Arcade = () => {
     }
   };
 
-  const filteredGames = selectedCategory === 'all' 
-    ? games 
-    : games.filter(g => g.category === selectedCategory);
-
-  const totalScore = Object.values(highScores).reduce((a, b) => a + b, 0);
-  const gamesPlayed = Object.keys(highScores).length;
-
-  // Calculate player rank
-  const RANKS = [
-    { name: 'BRONZE', min: 0, color: '#CD7F32', icon: Medal },
-    { name: 'SILVER', min: 10000, color: '#C0C0C0', icon: Medal },
-    { name: 'GOLD', min: 50000, color: '#FFD700', icon: Trophy },
-    { name: 'PLATINUM', min: 100000, color: '#E5E4E2', icon: Crown },
-    { name: 'DIAMOND', min: 200000, color: '#B9F2FF', icon: Crown },
-    { name: 'LEGEND', min: 500000, color: '#FF00FF', icon: Star },
-  ];
-
-  const getRank = (score) => {
-    for (let i = RANKS.length - 1; i >= 0; i--) {
-      if (score >= RANKS[i].min) return RANKS[i];
-    }
-    return RANKS[0];
-  };
-
-  const playerRank = getRank(totalScore);
-  const nextRank = RANKS[RANKS.indexOf(playerRank) + 1];
-  const progressToNext = nextRank 
-    ? ((totalScore - playerRank.min) / (nextRank.min - playerRank.min)) * 100 
-    : 100;
-
+  // Game Screen
   if (currentGame) {
     const game = games.find(g => g.id === currentGame);
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a0a2e] to-[#0a0a0a] p-4">
+      <div className="min-h-screen bg-[#0a0a0f] p-4">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <button
               onClick={() => setCurrentGame(null)}
-              className="retro-btn flex items-center gap-2 text-[10px]"
-              style={{ color: game?.color }}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-all"
               data-testid="back-btn"
             >
               <ArrowLeft className="w-4 h-4" />
-              BACK
+              <span className="text-sm font-medium">Back</span>
             </button>
-            <div className="text-center">
-              <h2 className="text-xl neon-text" style={{ color: game?.color }}>
-                {game?.icon} {game?.name}
-              </h2>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">{game?.icon}</span>
+              <div>
+                <h2 className="text-lg font-bold text-white">{game?.name}</h2>
+                <p className="text-xs text-white/50">High Score: {(highScores[currentGame] || 0).toLocaleString()}</p>
+              </div>
             </div>
-            <button
-              onClick={() => setSoundEnabled(!soundEnabled)}
-              className="retro-btn text-[10px]"
-            >
-              {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-            </button>
+            <div className="w-24" />
           </div>
-          {renderGame()}
+          <div className="glass-card p-6">
+            {renderGame()}
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a0a2e] to-[#0a0a0a] crt-effect">
+    <div className="min-h-screen bg-[#0a0a0f] relative overflow-hidden">
+      {/* Background Orbs */}
+      <div className="bg-orb w-[500px] h-[500px] bg-purple-500/30 -top-64 -left-64" />
+      <div className="bg-orb w-[400px] h-[400px] bg-cyan-500/20 top-1/2 -right-48" style={{ animationDelay: '-5s' }} />
+      <div className="bg-orb w-[300px] h-[300px] bg-pink-500/20 bottom-0 left-1/3" style={{ animationDelay: '-10s' }} />
+
       {/* Hero Section */}
-      <header className="relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute w-96 h-96 bg-[#ff00ff]/20 rounded-full blur-3xl -top-48 -left-48 animate-pulse" />
-          <div className="absolute w-96 h-96 bg-[#00ffff]/20 rounded-full blur-3xl -top-48 -right-48 animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute w-64 h-64 bg-[#ffff00]/10 rounded-full blur-3xl top-20 left-1/2 -translate-x-1/2 animate-pulse" style={{ animationDelay: '0.5s' }} />
-        </div>
-
-        <div className="relative pt-8 pb-6 text-center px-4">
-          {/* Logo */}
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <Gamepad2 className="w-10 h-10 text-[#ff00ff] animate-bounce" style={{ animationDuration: '2s' }} />
-            <h1 className="text-4xl md:text-5xl font-bold tracking-wider">
-              <span className="text-[#ff00ff] neon-text">MINI</span>
-              <span className="text-white mx-2">RETRO</span>
-              <span className="text-[#00ffff] neon-text">ARCADE</span>
-            </h1>
-            <Gamepad2 className="w-10 h-10 text-[#00ffff] animate-bounce" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
-          </div>
-          
-          <p className="text-[#888] text-sm tracking-widest mb-6">
-            {games.length} CLASSIC GAMES • COMPETE GLOBALLY
-          </p>
-
-          {/* Player Stats Card */}
-          <div className="max-w-md mx-auto mb-6">
-            <div className="bg-gradient-to-r from-[#1a0a2e] via-[#2a1a4e] to-[#1a0a2e] rounded-xl p-4 border-2 border-[#ff00ff] relative overflow-hidden">
-              {/* Animated background */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 animate-shimmer" />
-              
-              <div className="relative flex items-center gap-4">
-                {/* Player Avatar */}
-                <div className="relative">
-                  {playerProfile.useCustomImage && playerProfile.customImage ? (
-                    <img 
-                      src={playerProfile.customImage} 
-                      alt="Profile" 
-                      className="w-14 h-14 rounded-full object-cover border-2"
-                      style={{ borderColor: playerRank.color }}
-                    />
-                  ) : (
-                    <div className="w-14 h-14 rounded-full bg-black/50 flex items-center justify-center text-3xl border-2" 
-                      style={{ borderColor: playerRank.color }}>
-                      {playerProfile.avatar}
-                    </div>
-                  )}
-                  <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: playerRank.color }}>
-                    <playerRank.icon className="w-3 h-3 text-black" />
-                  </div>
-                </div>
-
-                {/* Player Info */}
-                <div className="flex-1 text-left">
-                  <div className="flex items-center gap-2">
-                    <span className="text-white font-bold">{playerProfile.name}</span>
-                    <span className="text-xs" style={{ color: playerRank.color }}>{playerRank.name}</span>
-                  </div>
-                  <p className="text-[#00ff00] text-xl font-mono font-bold">{totalScore.toLocaleString()}</p>
-                  
-                  {/* Progress Bar */}
-                  {nextRank && (
-                    <div className="mt-1">
-                      <div className="h-1.5 bg-black/50 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full transition-all duration-500"
-                          style={{ 
-                            width: `${Math.min(100, progressToNext)}%`,
-                            background: `linear-gradient(to right, ${playerRank.color}, ${nextRank.color})`
-                          }}
-                        />
-                      </div>
-                      <p className="text-[8px] text-[#888] mt-0.5">
-                        {(nextRank.min - totalScore).toLocaleString()} to {nextRank.name}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Quick Stats */}
-                <div className="text-right space-y-1">
-                  <div className="bg-black/30 rounded px-2 py-1">
-                    <p className="text-[#ffff00] text-sm font-bold">{gamesPlayed}/{games.length}</p>
-                    <p className="text-[6px] text-[#888]">PLAYED</p>
-                  </div>
-                </div>
+      <header className="relative pt-8 pb-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          {/* Top Bar */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+                <Gamepad2 className="w-5 h-5 text-white" />
               </div>
-
-              {/* Leaderboard Button */}
-              <div className="flex gap-2 mt-3">
-                <button 
-                  onClick={() => setShowDashboard(true)}
-                  className="flex-1 py-2 bg-gradient-to-r from-[#00ffff]/30 to-[#00ff00]/30 rounded-lg 
-                    border border-[#00ffff]/50 flex items-center justify-center gap-2 hover:scale-105 transition-transform"
-                  data-testid="open-dashboard-btn"
-                >
-                  <Home className="w-4 h-4 text-[#00ffff]" />
-                  <span className="text-[#00ffff] text-[10px] font-bold">DASHBOARD</span>
-                </button>
-                <button 
-                  onClick={() => setShowProfile(true)}
-                  className="flex-1 py-2 bg-gradient-to-r from-[#ff00ff]/30 to-[#ff8800]/30 rounded-lg 
-                    border border-[#ff00ff]/50 flex items-center justify-center gap-2 hover:scale-105 transition-transform"
-                  data-testid="open-profile-btn"
-                >
-                  <User className="w-4 h-4 text-[#ff00ff]" />
-                  <span className="text-[#ff00ff] text-[10px] font-bold">PROFILE</span>
-                </button>
+              <div>
+                <h1 className="text-xl font-bold text-white">Mini Arcade</h1>
+                <p className="text-xs text-white/50">{games.length} Games</p>
               </div>
-              <button 
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowDashboard(true)}
+                className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-all"
+                data-testid="open-dashboard-btn"
+              >
+                <Home className="w-5 h-5" />
+              </button>
+              <button
                 onClick={() => setShowLeaderboard(true)}
-                className="w-full mt-2 py-2 bg-gradient-to-r from-[#ffff00]/20 to-[#ff8800]/20 rounded-lg 
-                  border border-[#ffff00]/50 flex items-center justify-center gap-2 hover:scale-105 transition-transform"
+                className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-all"
                 data-testid="open-leaderboard-btn"
               >
-                <Trophy className="w-4 h-4 text-[#ffff00]" />
-                <span className="text-[#ffff00] text-[10px] font-bold">GLOBAL LEADERBOARD</span>
-                <Flame className="w-4 h-4 text-[#ff8800]" />
+                <Trophy className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setShowProfile(true)}
+                className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-all"
+                data-testid="open-profile-btn"
+              >
+                <User className="w-5 h-5" />
               </button>
             </div>
           </div>
 
-          {/* Featured Game Carousel */}
-          <div className="max-w-lg mx-auto mb-6">
-            <p className="text-[#ffff00] text-xs mb-3 flex items-center justify-center gap-2">
-              <Star className="w-3 h-3" /> FEATURED GAME <Star className="w-3 h-3" />
-            </p>
-            <button
-              onClick={() => setCurrentGame(featuredGames[heroIndex].id)}
-              className="w-full bg-gradient-to-r from-[#1a0a2e] to-[#2a1a4e] border-2 rounded-xl p-4 
-                transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(255,0,255,0.3)]"
-              style={{ borderColor: featuredGames[heroIndex].color }}
-              data-testid="featured-game-btn"
-            >
-              <div className="flex items-center justify-between">
-                <div className="text-left">
-                  <span className="text-5xl">{featuredGames[heroIndex].icon}</span>
+          {/* Player Card */}
+          <div className="glass-card p-6 mb-8">
+            <div className="flex flex-col md:flex-row md:items-center gap-6">
+              {/* Avatar & Info */}
+              <div className="flex items-center gap-4 flex-1">
+                <div className="relative">
+                  {playerProfile.useCustomImage && playerProfile.customImage ? (
+                    <img src={playerProfile.customImage} alt="Profile" className="w-16 h-16 rounded-2xl object-cover ring-2 ring-purple-500/50" />
+                  ) : (
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 flex items-center justify-center text-3xl ring-2 ring-purple-500/50">
+                      {playerProfile.avatar}
+                    </div>
+                  )}
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-lg flex items-center justify-center text-xs" style={{ backgroundColor: playerRank.color }}>
+                    <playerRank.icon className="w-3 h-3 text-black" />
+                  </div>
                 </div>
-                <div className="text-center flex-1">
-                  <h3 className="text-2xl neon-text mb-1" style={{ color: featuredGames[heroIndex].color }}>
-                    {featuredGames[heroIndex].name}
-                  </h3>
-                  <p className="text-[#888] text-sm">{featuredGames[heroIndex].desc}</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-[#00ff00] text-xs">PLAY NOW →</span>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-lg font-bold text-white">{playerProfile.name}</span>
+                    <span className="text-sm">{playerProfile.country}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-md" style={{ backgroundColor: `${playerRank.color}20`, color: playerRank.color }}>
+                      {playerRank.name}
+                    </span>
+                    <span className="text-xs text-white/50">{totalScore.toLocaleString()} pts</span>
+                  </div>
+                  {nextRank && (
+                    <div className="mt-2 w-48">
+                      <div className="progress-bar">
+                        <div className="progress-fill bg-gradient-to-r from-purple-500 to-cyan-500" style={{ width: `${progressToNext}%` }} />
+                      </div>
+                      <p className="text-[10px] text-white/40 mt-1">{(nextRank.min - totalScore).toLocaleString()} to {nextRank.name}</p>
+                    </div>
+                  )}
                 </div>
               </div>
-            </button>
-            
-            {/* Carousel Dots */}
-            <div className="flex justify-center gap-2 mt-3">
-              {featuredGames.map((_, i) => (
+
+              {/* Stats */}
+              <div className="flex gap-4">
+                <div className="stat-card min-w-[100px]">
+                  <Trophy className="w-5 h-5 text-yellow-500 mx-auto mb-1" />
+                  <p className="stat-value gradient-text-gold">{totalScore.toLocaleString()}</p>
+                  <p className="text-[10px] text-white/40">Total Score</p>
+                </div>
+                <div className="stat-card min-w-[100px]">
+                  <Gamepad2 className="w-5 h-5 text-cyan-500 mx-auto mb-1" />
+                  <p className="stat-value text-cyan-400">{gamesPlayed}/{games.length}</p>
+                  <p className="text-[10px] text-white/40">Played</p>
+                </div>
+                <div className="stat-card min-w-[100px]">
+                  <TrendingUp className="w-5 h-5 text-green-500 mx-auto mb-1" />
+                  <p className="stat-value text-green-400">#{Math.max(1, 21 - Math.floor(totalScore / 5000))}</p>
+                  <p className="text-[10px] text-white/40">Rank</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Featured Games */}
+          <div className="mb-8">
+            <h2 className="text-sm font-semibold text-white/70 mb-4 flex items-center gap-2">
+              <Flame className="w-4 h-4 text-orange-500" /> Featured Games
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              {featuredGames.slice(0, 6).map(game => (
                 <button
-                  key={i}
-                  onClick={() => setHeroIndex(i)}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    i === heroIndex ? 'bg-[#ff00ff] w-6' : 'bg-[#333]'
-                  }`}
-                />
+                  key={game.id}
+                  onClick={() => setCurrentGame(game.id)}
+                  className="glass-card glass-card-hover p-4 text-left group"
+                  data-testid={`featured-${game.id}`}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="text-3xl game-icon">{game.icon}</span>
+                    <span className="badge-hot">Hot</span>
+                  </div>
+                  <h3 className="text-sm font-semibold text-white mb-1">{game.name}</h3>
+                  <p className="text-[10px] text-white/50">{game.desc}</p>
+                  {highScores[game.id] > 0 && (
+                    <p className="text-[10px] text-green-400 mt-2">{highScores[game.id].toLocaleString()} pts</p>
+                  )}
+                </button>
               ))}
             </div>
           </div>
         </div>
       </header>
 
-      {/* Category Tabs */}
-      <div className="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur border-y border-[#333] py-3">
+      {/* Categories */}
+      <div className="sticky top-0 z-40 bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5 py-4">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
             {categories.map(cat => {
               const Icon = cat.icon;
-              const isActive = selectedCategory === cat.id;
               const count = cat.id === 'all' ? games.length : games.filter(g => g.category === cat.id).length;
-              
               return (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all text-xs
-                    ${isActive 
-                      ? 'bg-gradient-to-r from-[#1a1a2e] to-[#2a2a4e] border-2 scale-105' 
-                      : 'bg-black/30 border border-[#333] hover:border-[#666]'
-                    }`}
-                  style={{ borderColor: isActive ? cat.color : undefined, color: isActive ? cat.color : '#888' }}
+                  className={`category-pill flex items-center gap-2 ${selectedCategory === cat.id ? 'active' : ''}`}
                   data-testid={`category-${cat.id}`}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{cat.name}</span>
-                  <span className="bg-black/50 px-2 py-0.5 rounded-full text-[10px]">{count}</span>
+                  <span className="text-[10px] opacity-50">{count}</span>
                 </button>
               );
             })}
@@ -454,7 +389,40 @@ const Arcade = () => {
         </div>
       </div>
 
-      {/* Leaderboard */}
+      {/* Games Grid */}
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          {filteredGames.map(game => (
+            <button
+              key={game.id}
+              onClick={() => setCurrentGame(game.id)}
+              className="game-card text-left group"
+              data-testid={`game-${game.id}`}
+            >
+              {game.featured && (
+                <div className="absolute top-3 right-3">
+                  <span className="badge-hot">Hot</span>
+                </div>
+              )}
+              <div className="text-4xl mb-3 game-icon">{game.icon}</div>
+              <h3 className="text-sm font-semibold text-white mb-1">{game.name}</h3>
+              <p className="text-[11px] text-white/40 mb-3">{game.desc}</p>
+              <div className="flex items-center justify-between">
+                {highScores[game.id] > 0 ? (
+                  <span className="text-[10px] text-green-400 font-medium">{highScores[game.id].toLocaleString()}</span>
+                ) : (
+                  <span className="text-[10px] text-white/20">No score yet</span>
+                )}
+                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Play className="w-4 h-4 text-white" />
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </main>
+
+      {/* Modals */}
       {showLeaderboard && (
         <Leaderboard 
           playerScore={totalScore}
@@ -464,7 +432,6 @@ const Arcade = () => {
         />
       )}
 
-      {/* Profile Page */}
       {showProfile && (
         <ProfilePage 
           onClose={() => setShowProfile(false)}
@@ -477,7 +444,6 @@ const Arcade = () => {
         />
       )}
 
-      {/* Dashboard */}
       {showDashboard && (
         <Dashboard 
           onClose={() => setShowDashboard(false)}
@@ -490,74 +456,9 @@ const Arcade = () => {
         />
       )}
 
-      {/* High Scores Modal */}
-      {showScores && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 overflow-auto">
-          <div className="bg-[#1a0a2e] border-4 border-[#ff00ff] p-6 max-w-md w-full max-h-[80vh] overflow-auto neon-box rounded-xl">
-            <h2 className="text-xl text-center mb-6 text-[#ffff00] neon-text">🏆 HIGH SCORES 🏆</h2>
-            <div className="space-y-2">
-              {games.sort((a,b) => (highScores[b.id] || 0) - (highScores[a.id] || 0)).map(game => (
-                <div key={game.id} className="flex justify-between items-center text-xs py-1 border-b border-[#333]">
-                  <span style={{ color: game.color }}>{game.icon} {game.name}</span>
-                  <span className="text-[#00ff00] font-mono">{(highScores[game.id] || 0).toLocaleString()}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 pt-4 border-t-2 border-[#ffff00] flex justify-between text-sm">
-              <span className="text-[#ffff00]">TOTAL</span>
-              <span className="text-[#00ff00] font-mono">{totalScore.toLocaleString()}</span>
-            </div>
-            <button
-              onClick={() => setShowScores(false)}
-              className="retro-btn w-full mt-6 text-[10px] text-[#ff00ff]"
-            >
-              CLOSE
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Games Grid */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
-          {filteredGames.map((game) => (
-            <button
-              key={game.id}
-              onClick={() => setCurrentGame(game.id)}
-              className="group relative bg-black/50 border-2 rounded-xl p-4 transition-all duration-300 
-                hover:scale-105 hover:-translate-y-1 hover:shadow-lg neon-box"
-              style={{ 
-                borderColor: game.color,
-                '--glow-color': game.color,
-              }}
-              data-testid={`game-${game.id}`}
-            >
-              {game.featured && (
-                <div className="absolute -top-1 -right-1 bg-[#ffff00] text-black text-[8px] px-1.5 py-0.5 rounded-full font-bold">
-                  HOT
-                </div>
-              )}
-              <div className="text-4xl mb-2 group-hover:scale-125 transition-transform">
-                {game.icon}
-              </div>
-              <h3 className="text-[10px] mb-1 neon-text font-bold" style={{ color: game.color }}>
-                {game.name}
-              </h3>
-              <p className="text-[8px] text-[#888]">{game.desc}</p>
-              {highScores[game.id] > 0 && (
-                <div className="absolute top-1 left-1 text-[8px] text-[#00ff00] bg-black/70 px-1.5 py-0.5 rounded-full">
-                  {highScores[game.id].toLocaleString()}
-                </div>
-              )}
-            </button>
-          ))}
-        </div>
-      </main>
-
       {/* Footer */}
-      <footer className="text-center py-8 border-t border-[#333]">
-        <p className="text-[#666] text-xs mb-2">USE KEYBOARD, MOUSE, OR TOUCH TO PLAY</p>
-        <p className="text-[#444] text-[10px]">© 2026 MINI RETRO ARCADE • {games.length} GAMES</p>
+      <footer className="text-center py-8 border-t border-white/5">
+        <p className="text-white/30 text-xs">© 2026 Mini Arcade • {games.length} Games</p>
       </footer>
     </div>
   );
