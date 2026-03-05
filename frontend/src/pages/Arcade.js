@@ -290,10 +290,19 @@ const Arcade = () => {
               <div className="relative flex items-center gap-4">
                 {/* Player Avatar */}
                 <div className="relative">
-                  <div className="w-14 h-14 rounded-full bg-black/50 flex items-center justify-center text-3xl border-2" 
-                    style={{ borderColor: playerRank.color }}>
-                    {playerProfile.avatar}
-                  </div>
+                  {playerProfile.useCustomImage && playerProfile.customImage ? (
+                    <img 
+                      src={playerProfile.customImage} 
+                      alt="Profile" 
+                      className="w-14 h-14 rounded-full object-cover border-2"
+                      style={{ borderColor: playerRank.color }}
+                    />
+                  ) : (
+                    <div className="w-14 h-14 rounded-full bg-black/50 flex items-center justify-center text-3xl border-2" 
+                      style={{ borderColor: playerRank.color }}>
+                      {playerProfile.avatar}
+                    </div>
+                  )}
                   <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center"
                     style={{ backgroundColor: playerRank.color }}>
                     <playerRank.icon className="w-3 h-3 text-black" />

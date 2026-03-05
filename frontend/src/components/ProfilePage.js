@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   User, Trophy, Star, Flame, Target, Clock, Gamepad2, 
   Award, TrendingUp, Calendar, ChevronRight, Settings,
   Volume2, VolumeX, Bell, BellOff, Trash2, Download,
-  Share2, X, Edit2, Check, Crown, Medal, Zap
+  Share2, X, Edit2, Check, Crown, Medal, Zap, Camera, Upload
 } from 'lucide-react';
 
 const AVATARS = ['😎', '🥷', '👑', '👸', '🧙', '🦸', '🏃', '🤑', '⚔️', '🦹', '🎯', '🏎️', '🎮', '🧘', '🔍', '🏆', '🐣', '🌟', '🎸', '🚀', '🐱', '🐶', '🦊', '🐼', '🐨', '🦁', '🐯', '🐸', '🐙', '👽'];
@@ -17,7 +17,7 @@ const ACHIEVEMENTS = [
   { id: 'score_100k', name: 'Legend', desc: 'Score 100,000 points', icon: '👑', requirement: (s) => s.totalScore >= 100000 },
   { id: 'play_5', name: 'Explorer', desc: 'Play 5 different games', icon: '🔍', requirement: (s) => s.gamesPlayed >= 5 },
   { id: 'play_10', name: 'Adventurer', desc: 'Play 10 different games', icon: '🗺️', requirement: (s) => s.gamesPlayed >= 10 },
-  { id: 'play_all', name: 'Completionist', desc: 'Play all 32 games', icon: '🏆', requirement: (s) => s.gamesPlayed >= 32 },
+  { id: 'play_all', name: 'Completionist', desc: 'Play all 34 games', icon: '🏆', requirement: (s) => s.gamesPlayed >= 34 },
   { id: 'streak_3', name: 'On Fire', desc: 'Play 3 days in a row', icon: '🔥', requirement: (s) => s.streak >= 3 },
   { id: 'streak_7', name: 'Dedicated', desc: 'Play 7 days in a row', icon: '💪', requirement: (s) => s.streak >= 7 },
   { id: 'snake_master', name: 'Snake Charmer', desc: 'Score 500+ in Snake', icon: '🐍', requirement: (s) => (s.highScores?.snake || 0) >= 500 },
@@ -47,6 +47,10 @@ const ProfilePage = ({
   const [editName, setEditName] = useState(playerProfile?.name || 'Player1');
   const [editAvatar, setEditAvatar] = useState(playerProfile?.avatar || '🎮');
   const [editCountry, setEditCountry] = useState(playerProfile?.country || '🌍');
+  const [editCustomImage, setEditCustomImage] = useState(playerProfile?.customImage || null);
+  const [useCustomImage, setUseCustomImage] = useState(playerProfile?.useCustomImage || false);
+  const [avatarTab, setAvatarTab] = useState('emoji'); // emoji or custom
+  const fileInputRef = useRef(null);
   const [settings, setSettings] = useState(() => {
     const saved = localStorage.getItem('miniArcadeSettings');
     return saved ? JSON.parse(saved) : {
@@ -90,13 +94,33 @@ const ProfilePage = ({
     })
     .filter(g => g.name);
 
+  // Handle image upload
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 500000) {
+        alert('Image too large! Please use an image under 500KB.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditCustomImage(reader.result);
+        setUseCustomImage(true);
+        setAvatarTab('custom');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Save profile
   const saveProfile = () => {
     const newProfile = { 
       ...playerProfile, 
       name: editName, 
       avatar: editAvatar, 
-      country: editCountry 
+      country: editCountry,
+      customImage: editCustomImage,
+      useCustomImage: useCustomImage,
     };
     setPlayerProfile(newProfile);
     localStorage.setItem('miniArcadeProfile', JSON.stringify(newProfile));
@@ -129,6 +153,28 @@ const ProfilePage = ({
     });
   };
 
+  // Render avatar or custom image
+  const renderProfileImage = (size = 'large') => {
+    const sizeClasses = size === 'large' ? 'w-20 h-20 text-5xl' : 'w-14 h-14 text-3xl';
+    
+    if (useCustomImage && editCustomImage) {
+      return (
+        <img 
+          src={editCustomImage} 
+          alt="Profile" 
+          className={`${size === 'large' ? 'w-20 h-20' : 'w-14 h-14'} rounded-full object-cover border-4`}
+          style={{ borderColor: playerRank.color }}
+        />
+      );
+    }
+    return (
+      <div className={`${sizeClasses} rounded-full bg-black/50 flex items-center justify-center border-4`} 
+        style={{ borderColor: playerRank.color }}>
+        {editAvatar}
+      </div>
+    );
+  };
+
   return (
     <div className="fixed inset-0 bg-black/95 z-50 overflow-auto">
       <div className="max-w-2xl mx-auto p-4 pb-20">
@@ -146,30 +192,102 @@ const ProfilePage = ({
         <div className="bg-gradient-to-r from-[#1a0a2e] to-[#2a1a4e] rounded-xl p-6 mb-6 border-2 border-[#ff00ff]">
           {editMode ? (
             <div className="space-y-4">
+              {/* Username */}
               <div>
-                <label className="text-[#888] text-xs">NAME</label>
+                <label className="text-[#888] text-xs flex items-center gap-2">
+                  <User className="w-3 h-3" /> USERNAME
+                </label>
                 <input
                   type="text"
                   value={editName}
-                  onChange={(e) => setEditName(e.target.value.slice(0, 12))}
-                  maxLength={12}
-                  className="w-full bg-black/50 border border-[#333] rounded-lg px-3 py-2 text-white mt-1"
+                  onChange={(e) => setEditName(e.target.value.slice(0, 16))}
+                  maxLength={16}
+                  placeholder="Enter your name..."
+                  className="w-full bg-black/50 border border-[#ff00ff] rounded-lg px-4 py-3 text-white mt-1 text-lg focus:outline-none focus:border-[#00ffff]"
                 />
+                <p className="text-[#666] text-[10px] mt-1">{editName.length}/16 characters</p>
               </div>
+
+              {/* Avatar Selection Tabs */}
               <div>
-                <label className="text-[#888] text-xs">AVATAR</label>
-                <div className="grid grid-cols-10 gap-1 mt-1">
-                  {AVATARS.map(a => (
-                    <button
-                      key={a}
-                      onClick={() => setEditAvatar(a)}
-                      className={`text-xl p-1 rounded ${editAvatar === a ? 'bg-[#ff00ff]/30 ring-2 ring-[#ff00ff]' : ''}`}
-                    >
-                      {a}
-                    </button>
-                  ))}
+                <label className="text-[#888] text-xs flex items-center gap-2 mb-2">
+                  <Camera className="w-3 h-3" /> PROFILE PICTURE
+                </label>
+                <div className="flex gap-2 mb-3">
+                  <button
+                    onClick={() => { setAvatarTab('emoji'); setUseCustomImage(false); }}
+                    className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
+                      avatarTab === 'emoji' ? 'bg-[#ff00ff] text-white' : 'bg-black/50 text-[#888] border border-[#333]'
+                    }`}
+                  >
+                    EMOJI AVATAR
+                  </button>
+                  <button
+                    onClick={() => setAvatarTab('custom')}
+                    className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
+                      avatarTab === 'custom' ? 'bg-[#ff00ff] text-white' : 'bg-black/50 text-[#888] border border-[#333]'
+                    }`}
+                  >
+                    CUSTOM IMAGE
+                  </button>
                 </div>
+
+                {avatarTab === 'emoji' ? (
+                  <div className="grid grid-cols-10 gap-1">
+                    {AVATARS.map(a => (
+                      <button
+                        key={a}
+                        onClick={() => { setEditAvatar(a); setUseCustomImage(false); }}
+                        className={`text-xl p-1.5 rounded transition-all hover:scale-110 ${
+                          editAvatar === a && !useCustomImage ? 'bg-[#ff00ff]/30 ring-2 ring-[#ff00ff] scale-110' : 'hover:bg-[#333]'
+                        }`}
+                      >
+                        {a}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {/* Current custom image preview */}
+                    {editCustomImage && (
+                      <div className="flex items-center justify-center">
+                        <div className="relative">
+                          <img 
+                            src={editCustomImage} 
+                            alt="Preview" 
+                            className="w-24 h-24 rounded-full object-cover border-4 border-[#ff00ff]"
+                          />
+                          <button
+                            onClick={() => { setEditCustomImage(null); setUseCustomImage(false); }}
+                            className="absolute -top-2 -right-2 w-6 h-6 bg-[#ff0000] rounded-full flex items-center justify-center"
+                          >
+                            <X className="w-4 h-4 text-white" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Upload button */}
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleImageUpload}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full py-3 bg-black/50 border-2 border-dashed border-[#00ffff] rounded-lg flex items-center justify-center gap-2 hover:bg-[#00ffff]/10 transition-all"
+                    >
+                      <Upload className="w-5 h-5 text-[#00ffff]" />
+                      <span className="text-[#00ffff] text-sm">Upload Image</span>
+                    </button>
+                    <p className="text-[#666] text-[10px] text-center">Max 500KB • JPG, PNG, GIF</p>
+                  </div>
+                )}
               </div>
+
+              {/* Country */}
               <div>
                 <label className="text-[#888] text-xs">COUNTRY</label>
                 <div className="grid grid-cols-7 gap-1 mt-1">
@@ -177,15 +295,29 @@ const ProfilePage = ({
                     <button
                       key={c}
                       onClick={() => setEditCountry(c)}
-                      className={`text-xl p-1 rounded ${editCountry === c ? 'bg-[#ff00ff]/30 ring-2 ring-[#ff00ff]' : ''}`}
+                      className={`text-xl p-1.5 rounded transition-all hover:scale-110 ${
+                        editCountry === c ? 'bg-[#ff00ff]/30 ring-2 ring-[#ff00ff] scale-110' : 'hover:bg-[#333]'
+                      }`}
                     >
                       {c}
                     </button>
                   ))}
                 </div>
               </div>
+
+              {/* Save/Cancel buttons */}
               <div className="flex gap-2 pt-2">
-                <button onClick={() => setEditMode(false)} className="flex-1 py-2 bg-black/50 text-[#888] rounded-lg">
+                <button 
+                  onClick={() => {
+                    setEditMode(false);
+                    setEditName(playerProfile?.name || 'Player1');
+                    setEditAvatar(playerProfile?.avatar || '🎮');
+                    setEditCountry(playerProfile?.country || '🌍');
+                    setEditCustomImage(playerProfile?.customImage || null);
+                    setUseCustomImage(playerProfile?.useCustomImage || false);
+                  }} 
+                  className="flex-1 py-2 bg-black/50 text-[#888] rounded-lg border border-[#333]"
+                >
                   CANCEL
                 </button>
                 <button onClick={saveProfile} className="flex-1 py-2 bg-[#00ff00] text-black rounded-lg font-bold flex items-center justify-center gap-2">
@@ -196,10 +328,7 @@ const ProfilePage = ({
           ) : (
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="w-20 h-20 rounded-full bg-black/50 flex items-center justify-center text-5xl border-4" 
-                  style={{ borderColor: playerRank.color }}>
-                  {playerProfile?.avatar || '🎮'}
-                </div>
+                {renderProfileImage('large')}
                 <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: playerRank.color }}>
                   <playerRank.icon className="w-4 h-4 text-black" />
@@ -209,7 +338,7 @@ const ProfilePage = ({
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-white text-xl font-bold">{playerProfile?.name || 'Player1'}</span>
                   <span className="text-lg">{playerProfile?.country || '🌍'}</span>
-                  <button onClick={() => setEditMode(true)} className="ml-2 text-[#888] hover:text-[#ff00ff]">
+                  <button onClick={() => setEditMode(true)} className="ml-2 text-[#888] hover:text-[#ff00ff] transition-colors">
                     <Edit2 className="w-4 h-4" />
                   </button>
                 </div>
@@ -254,7 +383,7 @@ const ProfilePage = ({
               </div>
               <div className="bg-black/30 rounded-xl p-4 border border-[#333] text-center">
                 <Gamepad2 className="w-6 h-6 text-[#00ffff] mx-auto mb-2" />
-                <p className="text-[#00ffff] text-xl font-bold">{gamesPlayed}/32</p>
+                <p className="text-[#00ffff] text-xl font-bold">{gamesPlayed}/34</p>
                 <p className="text-[8px] text-[#888]">GAMES PLAYED</p>
               </div>
               <div className="bg-black/30 rounded-xl p-4 border border-[#333] text-center">
@@ -390,7 +519,7 @@ const ProfilePage = ({
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-[#333]">
                   <span className="text-[#888] text-sm">Games Played</span>
-                  <span className="text-[#00ffff] font-mono">{gamesPlayed}/32</span>
+                  <span className="text-[#00ffff] font-mono">{gamesPlayed}/34</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-[#333]">
                   <span className="text-[#888] text-sm">Current Rank</span>
@@ -423,6 +552,7 @@ const ProfilePage = ({
                   <div key={game.id} className="flex items-center gap-2 p-2 bg-black/30 rounded-lg">
                     <span className="text-lg">{game.icon}</span>
                     <span className="flex-1 text-xs text-white">{game.name}</span>
+                    <span className="text-[8px] text-[#666] uppercase">{game.category}</span>
                     <span className={`font-mono text-sm ${highScores[game.id] ? 'text-[#00ff00]' : 'text-[#333]'}`}>
                       {(highScores[game.id] || 0).toLocaleString()}
                     </span>
