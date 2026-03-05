@@ -31,6 +31,8 @@ import RockPaperScissors from '../games/RockPaperScissors';
 import CatchGame from '../games/CatchGame';
 import QuizGame from '../games/QuizGame';
 import ClickerGame from '../games/ClickerGame';
+import MazeAscension from '../games/MazeAscension';
+import Wrecker from '../games/Wrecker';
 import { Gamepad2, Trophy, Volume2, VolumeX, ArrowLeft, Star, Zap, Brain, MessageSquare, Users, Sparkles, Crown, Medal, Flame, User, Home } from 'lucide-react';
 import Leaderboard from '../components/Leaderboard';
 import ProfilePage from '../components/ProfilePage';
@@ -56,6 +58,8 @@ const games = [
   { id: 'dino', name: 'DINO RUN', color: '#00ff00', icon: '🦖', desc: 'Jump & Run!', category: 'action' },
   { id: 'asteroids', name: 'ASTEROIDS', color: '#00ffff', icon: '☄️', desc: 'Shoot Rocks!', category: 'action' },
   { id: 'whack', name: 'WHACK', color: '#8B4513', icon: '🐹', desc: 'Hit Moles!', category: 'action' },
+  { id: 'mazeascension', name: 'MAZE ASCENSION', color: '#00ff00', icon: '🧟', desc: 'Zombie Maze!', category: 'action', featured: true },
+  { id: 'wrecker', name: 'WRECKER', color: '#ff0000', icon: '🦖', desc: 'Smash City!', category: 'action', featured: true },
   
   // Puzzle Games
   { id: '2048', name: '2048', color: '#ff6600', icon: '🔢', desc: 'Merge Numbers!', category: 'puzzle', featured: true },
@@ -181,6 +185,8 @@ const Arcade = () => {
       case 'catch': return <CatchGame {...props} />;
       case 'quiz': return <QuizGame {...props} />;
       case 'clicker': return <ClickerGame {...props} />;
+      case 'mazeascension': return <MazeAscension {...props} />;
+      case 'wrecker': return <Wrecker {...props} />;
       default: return null;
     }
   };
