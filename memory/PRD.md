@@ -3,100 +3,67 @@
 ## Project Overview
 **Name:** Mini Retro Arcade  
 **Type:** Frontend-only React SPA  
-**Description:** A competitive collection of 34 classic retro games with dashboard, profile system, global leaderboards, achievements, and weekly challenges  
+**Description:** A competitive collection of 34 classic retro games with dashboard, profile system, global leaderboards, and achievements  
 **URL:** https://jarvis-hub-12.preview.emergentagent.com
 
 ## Tech Stack
 - **Frontend:** React with Tailwind CSS
-- **State Management:** React Hooks (useState, useEffect, useCallback)
-- **Storage:** LocalStorage for high scores, profiles, settings, achievements
+- **State Management:** React Hooks
+- **Storage:** LocalStorage
 - **Rendering:** Canvas API for action games
 - **Icons:** Lucide React
 
-## Current Features (Implemented)
+## Featured Games
 
-### NEW GAMES (Jan 2026)
-- **Maze Ascension** 🧟 - Pac-Man style zombie maze game
-  - Collect dots, avoid zombies
-  - Power-ups let you eat zombies
-  - Multiple levels with increasing difficulty
-  - Mobile touch controls
-  
-- **Wrecker** 🦖 - Rampage-style city destruction
-  - Smash buildings as a giant monster
-  - Climb buildings, punch to destroy
-  - Rage meter for 2X damage
-  - Fight helicopters and soldiers
-  - Progressive levels with more buildings
+### Wrecker 🦖 (Updated!)
+Rampage-style city destruction with **5 selectable dinosaurs**:
+| Dino | Power | Speed | Special |
+|------|-------|-------|---------|
+| T-Rex | 20 | 3 | King of destruction |
+| Raptor | 12 | 5 | Fast & agile |
+| Triceratops | 25 | 2 | Tank mode |
+| Pterodactyl | 10 | 4 | Can fly! |
+| Stegosaurus | 18 | 2.5 | Tail whip |
 
-### Dashboard
-- Daily Challenge with +500 bonus points
-- Quick Actions: Random Game, All Games
-- Stats Overview: Total Score, Games Played, Day Streak
-- Continue Playing: Recent games list
-- Your Top Games, Try Something New suggestions
-- Weekly Goals with progress bars
+**Features:**
+- Smash buildings with health bars
+- Destroy cars driving on roads
+- Fight helicopters and tanks
+- Combo system for bonus points
+- Rage meter for 2X damage
+- Level progression
 
-### Profile Page
-- Profile Card: Avatar, name, rank badge, country flag
-- Edit Profile: 30 avatars, 21 country flags
-- 4 Tabs: Overview, Achievements, Stats, Settings
-- 12 unlockable achievements
-- Sound/notification toggles, reset progress
+### Maze Ascension 🧟
+Pac-Man style zombie survival with power-ups
 
-### Competitive Features
-- Global Leaderboard with 20+ simulated players
-- Rank System: Bronze → Silver → Gold → Platinum → Diamond → Legend
-- Weekly Challenges with rewards
-- Top 3 Podium display
+## All Games (34 Total)
 
-### Games List (34 Total)
+**Action (11):** Snake, Tetris, Breakout, Space Invaders, Pong, Flappy Bird, Dino Run, Asteroids, Whack-A-Mole, Maze Ascension, Wrecker
 
-#### Action Games (11)
-Snake, Tetris, Breakout, Space Invaders, Pong, Flappy Bird, Dino Run, Asteroids, Whack-A-Mole, **Maze Ascension**, **Wrecker**
+**Puzzle (6):** 2048, Minesweeper, Maze, Sliding Puzzle, Sudoku, Riddles
 
-#### Puzzle Games (6)
-2048, Minesweeper, Maze, Sliding Puzzle, Sudoku, Riddles
+**Word (6):** Wordle, Word Search, Word Finder, Crossword Mini, Hangman, Typing
 
-#### Word Games (6)
-Wordle, Word Search, Word Finder, Crossword Mini, Hangman, Typing
+**Strategy (4):** Tic Tac Toe (AI), Connect Four (AI), Memory, Simon
 
-#### Strategy Games (4)
-Tic Tac Toe (AI), Connect Four (AI), Memory, Simon
+**Casual (7):** Bubble Pop, Rock Paper Scissors, Catch Game, Quiz Master, Clicker, Reaction, Color Match
 
-#### Casual Games (7)
-Bubble Pop, Rock Paper Scissors, Catch Game, Quiz Master, Clicker, Reaction, Color Match
-
-## File Structure
-```
-/app/frontend/src/
-├── App.js
-├── index.css
-├── pages/
-│   └── Arcade.js
-├── components/
-│   ├── Leaderboard.js
-│   ├── ProfilePage.js
-│   └── Dashboard.js
-└── games/ (34 game files)
-    ├── MazeAscension.js (NEW - zombie pac-man)
-    ├── Wrecker.js (NEW - rampage style)
-    └── ... (32 other games)
-```
+## Core Features
+- Dashboard with daily challenges
+- Profile page with 12 achievements
+- Global leaderboard with rank system (Bronze → Legend)
+- Weekly challenges with rewards
+- 30 avatars, 21 country flags
 
 ## Implementation Timeline
-- **Dec 2025:** Initial 8 games
-- **Dec 2025:** Expanded to 25 games
-- **Jan 2026:** 32 games + categories + competitive leaderboard
-- **Jan 2026:** Dashboard + Profile page + Achievements
-- **Jan 2026:** Maze Ascension + Wrecker (34 total games)
+- Dec 2025: Initial games
+- Jan 2026: Expanded to 34 games
+- Jan 2026: Dashboard, Profile, Leaderboard
+- Jan 2026: Wrecker with selectable dinos & cars
 
-## Future Enhancements (Backlog)
-- [ ] Backend for real multiplayer leaderboards
-- [ ] User authentication
-- [ ] Sound effects and background music
-- [ ] More achievements (50+)
-- [ ] More games (Tower Defense, RPG, Racing)
-- [ ] Season pass system
-- [ ] Tournaments
-- [ ] Mobile app version
+## Future Enhancements
+- [ ] Sound effects & music
+- [ ] More dinosaurs & abilities
+- [ ] Tower Defense game
+- [ ] Racing game
+- [ ] Real multiplayer backend
