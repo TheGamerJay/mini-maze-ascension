@@ -31,8 +31,10 @@ import RockPaperScissors from '../games/RockPaperScissors';
 import CatchGame from '../games/CatchGame';
 import QuizGame from '../games/QuizGame';
 import ClickerGame from '../games/ClickerGame';
-import { Gamepad2, Trophy, Volume2, VolumeX, ArrowLeft, Star, Zap, Brain, MessageSquare, Users, Sparkles, Crown, Medal, Flame } from 'lucide-react';
+import { Gamepad2, Trophy, Volume2, VolumeX, ArrowLeft, Star, Zap, Brain, MessageSquare, Users, Sparkles, Crown, Medal, Flame, User, Home } from 'lucide-react';
 import Leaderboard from '../components/Leaderboard';
+import ProfilePage from '../components/ProfilePage';
+import Dashboard from '../components/Dashboard';
 
 const categories = [
   { id: 'all', name: 'ALL GAMES', icon: Sparkles, color: '#ff00ff' },
@@ -95,6 +97,8 @@ const Arcade = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [heroIndex, setHeroIndex] = useState(0);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
   const [playerProfile, setPlayerProfile] = useState(() => {
     const saved = localStorage.getItem('miniArcadeProfile');
     return saved ? JSON.parse(saved) : { name: 'Player1', avatar: '🎮', country: '🌍' };
@@ -118,6 +122,15 @@ const Arcade = () => {
   }, [featuredGames.length]);
 
   const updateHighScore = (gameId, score) => {
+    // Track recent games
+    const recent = JSON.parse(localStorage.getItem('miniArcadeRecentGames') || '[]');
+    const updatedRecent = [gameId, ...recent.filter(id => id !== gameId)].slice(0, 10);
+    localStorage.setItem('miniArcadeRecentGames', JSON.stringify(updatedRecent));
+
+    // Update session count
+    const sessions = parseInt(localStorage.getItem('miniArcadeSessions') || '0') + 1;
+    localStorage.setItem('miniArcadeSessions', sessions.toString());
+
     const current = highScores[gameId] || 0;
     if (score > current) {
       const newScores = { ...highScores, [gameId]: score };
@@ -318,14 +331,34 @@ const Arcade = () => {
               </div>
 
               {/* Leaderboard Button */}
+              <div className="flex gap-2 mt-3">
+                <button 
+                  onClick={() => setShowDashboard(true)}
+                  className="flex-1 py-2 bg-gradient-to-r from-[#00ffff]/30 to-[#00ff00]/30 rounded-lg 
+                    border border-[#00ffff]/50 flex items-center justify-center gap-2 hover:scale-105 transition-transform"
+                  data-testid="open-dashboard-btn"
+                >
+                  <Home className="w-4 h-4 text-[#00ffff]" />
+                  <span className="text-[#00ffff] text-[10px] font-bold">DASHBOARD</span>
+                </button>
+                <button 
+                  onClick={() => setShowProfile(true)}
+                  className="flex-1 py-2 bg-gradient-to-r from-[#ff00ff]/30 to-[#ff8800]/30 rounded-lg 
+                    border border-[#ff00ff]/50 flex items-center justify-center gap-2 hover:scale-105 transition-transform"
+                  data-testid="open-profile-btn"
+                >
+                  <User className="w-4 h-4 text-[#ff00ff]" />
+                  <span className="text-[#ff00ff] text-[10px] font-bold">PROFILE</span>
+                </button>
+              </div>
               <button 
                 onClick={() => setShowLeaderboard(true)}
-                className="w-full mt-3 py-2 bg-gradient-to-r from-[#ff00ff]/30 to-[#00ffff]/30 rounded-lg 
-                  border border-[#ff00ff]/50 flex items-center justify-center gap-2 hover:scale-105 transition-transform"
+                className="w-full mt-2 py-2 bg-gradient-to-r from-[#ffff00]/20 to-[#ff8800]/20 rounded-lg 
+                  border border-[#ffff00]/50 flex items-center justify-center gap-2 hover:scale-105 transition-transform"
                 data-testid="open-leaderboard-btn"
               >
                 <Trophy className="w-4 h-4 text-[#ffff00]" />
-                <span className="text-[#ffff00] text-xs font-bold">VIEW GLOBAL LEADERBOARD</span>
+                <span className="text-[#ffff00] text-[10px] font-bold">GLOBAL LEADERBOARD</span>
                 <Flame className="w-4 h-4 text-[#ff8800]" />
               </button>
             </div>
@@ -413,6 +446,32 @@ const Arcade = () => {
           gamesPlayed={gamesPlayed}
           highScores={highScores}
           onClose={() => setShowLeaderboard(false)}
+        />
+      )}
+
+      {/* Profile Page */}
+      {showProfile && (
+        <ProfilePage 
+          onClose={() => setShowProfile(false)}
+          highScores={highScores}
+          totalScore={totalScore}
+          gamesPlayed={gamesPlayed}
+          playerProfile={playerProfile}
+          setPlayerProfile={setPlayerProfile}
+          games={games}
+        />
+      )}
+
+      {/* Dashboard */}
+      {showDashboard && (
+        <Dashboard 
+          onClose={() => setShowDashboard(false)}
+          onPlayGame={(gameId) => setCurrentGame(gameId)}
+          highScores={highScores}
+          totalScore={totalScore}
+          gamesPlayed={gamesPlayed}
+          playerProfile={playerProfile}
+          games={games}
         />
       )}
 
