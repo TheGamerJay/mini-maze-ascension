@@ -18,28 +18,47 @@ import WordleGame from '../games/WordleGame';
 import AsteroidsGame from '../games/AsteroidsGame';
 import ReactionGame from '../games/ReactionGame';
 import ColorMatchGame from '../games/ColorMatchGame';
+import WordSearchGame from '../games/WordSearchGame';
+import WordFinderGame from '../games/WordFinderGame';
+import SlidingPuzzle from '../games/SlidingPuzzle';
+import CrosswordMini from '../games/CrosswordMini';
+import SudokuGame from '../games/SudokuGame';
+import HangmanGame from '../games/HangmanGame';
 import { Gamepad2, Trophy, Volume2, VolumeX, ArrowLeft } from 'lucide-react';
 
 const games = [
-  { id: 'snake', name: 'SNAKE', color: '#00ff00', icon: '🐍', desc: 'Eat & Grow!' },
-  { id: 'tetris', name: 'TETRIS', color: '#00ffff', icon: '🧱', desc: 'Stack Blocks!' },
-  { id: 'breakout', name: 'BREAKOUT', color: '#ff00ff', icon: '🎾', desc: 'Break Bricks!' },
-  { id: 'invaders', name: 'INVADERS', color: '#ff0000', icon: '👾', desc: 'Alien Attack!' },
-  { id: 'pong', name: 'PONG', color: '#ffff00', icon: '🏓', desc: 'Classic Tennis!' },
-  { id: 'flappy', name: 'FLAPPY', color: '#ff8800', icon: '🐦', desc: 'Fly High!' },
-  { id: '2048', name: '2048', color: '#ff6600', icon: '🔢', desc: 'Merge Numbers!' },
-  { id: 'memory', name: 'MEMORY', color: '#9900ff', icon: '🧠', desc: 'Match Pairs!' },
-  { id: 'minesweeper', name: 'MINES', color: '#ff0000', icon: '💣', desc: 'Avoid Bombs!' },
-  { id: 'maze', name: 'MAZE', color: '#00ffff', icon: '🔷', desc: 'Find Exit!' },
-  { id: 'riddle', name: 'RIDDLES', color: '#ff00ff', icon: '🧩', desc: 'Brain Teasers!' },
-  { id: 'simon', name: 'SIMON', color: '#ffff00', icon: '🎵', desc: 'Repeat Pattern!' },
-  { id: 'typing', name: 'TYPING', color: '#00ff00', icon: '⌨️', desc: 'Speed Type!' },
-  { id: 'whack', name: 'WHACK', color: '#8B4513', icon: '🐹', desc: 'Hit Moles!' },
-  { id: 'dino', name: 'DINO RUN', color: '#00ff00', icon: '🦖', desc: 'Jump & Run!' },
-  { id: 'wordle', name: 'WORDLE', color: '#00ff00', icon: '📝', desc: 'Guess Word!' },
-  { id: 'asteroids', name: 'ASTEROIDS', color: '#00ffff', icon: '☄️', desc: 'Shoot Rocks!' },
-  { id: 'reaction', name: 'REACTION', color: '#ff00ff', icon: '⚡', desc: 'Quick Tap!' },
-  { id: 'colormatch', name: 'COLORS', color: '#ff00ff', icon: '🎨', desc: 'Match Names!' },
+  // Classic Action Games
+  { id: 'snake', name: 'SNAKE', color: '#00ff00', icon: '🐍', desc: 'Eat & Grow!', category: 'action' },
+  { id: 'tetris', name: 'TETRIS', color: '#00ffff', icon: '🧱', desc: 'Stack Blocks!', category: 'action' },
+  { id: 'breakout', name: 'BREAKOUT', color: '#ff00ff', icon: '🎾', desc: 'Break Bricks!', category: 'action' },
+  { id: 'invaders', name: 'INVADERS', color: '#ff0000', icon: '👾', desc: 'Alien Attack!', category: 'action' },
+  { id: 'pong', name: 'PONG', color: '#ffff00', icon: '🏓', desc: 'Classic Tennis!', category: 'action' },
+  { id: 'flappy', name: 'FLAPPY', color: '#ff8800', icon: '🐦', desc: 'Fly High!', category: 'action' },
+  { id: 'dino', name: 'DINO RUN', color: '#00ff00', icon: '🦖', desc: 'Jump & Run!', category: 'action' },
+  { id: 'asteroids', name: 'ASTEROIDS', color: '#00ffff', icon: '☄️', desc: 'Shoot Rocks!', category: 'action' },
+  { id: 'whack', name: 'WHACK', color: '#8B4513', icon: '🐹', desc: 'Hit Moles!', category: 'action' },
+  
+  // Puzzle Games
+  { id: '2048', name: '2048', color: '#ff6600', icon: '🔢', desc: 'Merge Numbers!', category: 'puzzle' },
+  { id: 'minesweeper', name: 'MINES', color: '#ff0000', icon: '💣', desc: 'Avoid Bombs!', category: 'puzzle' },
+  { id: 'maze', name: 'MAZE', color: '#00ffff', icon: '🔷', desc: 'Find Exit!', category: 'puzzle' },
+  { id: 'sliding', name: 'SLIDER', color: '#ff00ff', icon: '🔲', desc: 'Slide Tiles!', category: 'puzzle' },
+  { id: 'sudoku', name: 'SUDOKU', color: '#00ff00', icon: '🔢', desc: 'Fill Numbers!', category: 'puzzle' },
+  { id: 'riddle', name: 'RIDDLES', color: '#ff00ff', icon: '🧩', desc: 'Brain Teasers!', category: 'puzzle' },
+  
+  // Word Games
+  { id: 'wordle', name: 'WORDLE', color: '#00ff00', icon: '📝', desc: 'Guess Word!', category: 'word' },
+  { id: 'wordsearch', name: 'SEARCH', color: '#ffff00', icon: '🔍', desc: 'Find Words!', category: 'word' },
+  { id: 'wordfinder', name: 'FINDER', color: '#ff8800', icon: '🔤', desc: 'Unscramble!', category: 'word' },
+  { id: 'crossword', name: 'CROSS', color: '#00ffff', icon: '✏️', desc: 'Fill Clues!', category: 'word' },
+  { id: 'hangman', name: 'HANGMAN', color: '#ff0000', icon: '🎭', desc: 'Save Him!', category: 'word' },
+  { id: 'typing', name: 'TYPING', color: '#00ff00', icon: '⌨️', desc: 'Speed Type!', category: 'word' },
+  
+  // Memory & Quick Games
+  { id: 'memory', name: 'MEMORY', color: '#9900ff', icon: '🧠', desc: 'Match Pairs!', category: 'memory' },
+  { id: 'simon', name: 'SIMON', color: '#ffff00', icon: '🎵', desc: 'Repeat Pattern!', category: 'memory' },
+  { id: 'reaction', name: 'REACTION', color: '#ff00ff', icon: '⚡', desc: 'Quick Tap!', category: 'memory' },
+  { id: 'colormatch', name: 'COLORS', color: '#ff00ff', icon: '🎨', desc: 'Match Names!', category: 'memory' },
 ];
 
 const Arcade = () => {
@@ -93,6 +112,12 @@ const Arcade = () => {
       case 'asteroids': return <AsteroidsGame {...props} />;
       case 'reaction': return <ReactionGame {...props} />;
       case 'colormatch': return <ColorMatchGame {...props} />;
+      case 'wordsearch': return <WordSearchGame {...props} />;
+      case 'wordfinder': return <WordFinderGame {...props} />;
+      case 'sliding': return <SlidingPuzzle {...props} />;
+      case 'crossword': return <CrosswordMini {...props} />;
+      case 'sudoku': return <SudokuGame {...props} />;
+      case 'hangman': return <HangmanGame {...props} />;
       default: return null;
     }
   };
@@ -141,7 +166,7 @@ const Arcade = () => {
         <div className="flex items-center justify-center gap-4 mb-4">
           <Gamepad2 className="w-12 h-12 text-[#ff00ff] neon-text" />
           <h1 className="text-3xl md:text-4xl rainbow-text neon-text tracking-wider">
-            RETRO ARCADE
+            MINI RETRO ARCADE
           </h1>
           <Gamepad2 className="w-12 h-12 text-[#00ffff] neon-text" />
         </div>
@@ -221,7 +246,7 @@ const Arcade = () => {
       {/* Footer */}
       <footer className="text-center py-6 text-[8px] text-[#666]">
         <p>USE ARROW KEYS, MOUSE, OR TOUCH TO PLAY</p>
-        <p className="mt-2">© 2025 RETRO ARCADE • {games.length} GAMES</p>
+        <p className="mt-2">© 2025 MINI RETRO ARCADE • {games.length} GAMES</p>
       </footer>
     </div>
   );
