@@ -1,0 +1,13 @@
+{
+  "name": "mini-arcade",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cd frontend && npx serve -s build -l ${PORT:-3000}",
+    "build": "cd frontend && yarn install && yarn build",
+    "install:all": "cd frontend && yarn install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
