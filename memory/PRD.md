@@ -1,9 +1,10 @@
 # Mini Retro Arcade - Product Requirements Document
 
 ## Project Overview
-**Name:** Mini Retro Arcade
-**Type:** Frontend-only React SPA
-**Description:** A collection of 25 classic retro games with a neon arcade aesthetic
+**Name:** Mini Retro Arcade  
+**Type:** Frontend-only React SPA  
+**Description:** A collection of 32 classic retro games with a neon arcade aesthetic  
+**URL:** https://jarvis-hub-12.preview.emergentagent.com
 
 ## Tech Stack
 - **Frontend:** React with Tailwind CSS
@@ -14,96 +15,55 @@
 ## Current Features (Implemented)
 
 ### Core Features
-- Main arcade hub with game grid display
-- 25 playable games organized by category
+- Beautiful hero section with animated background & featured game carousel
+- **32 playable games** organized by 5 categories
+- Category filters (All, Action, Puzzle, Word, Strategy, Casual)
 - High score tracking with localStorage persistence
 - Total score aggregation across all games
+- Games played counter
+- Leaderboard modal sorted by high scores
 - Retro neon visual theme with CRT effects
-- Sound toggle functionality
+- "HOT" badges on featured games
 - Responsive design (mobile/tablet/desktop)
 
-### Games List (25 Total)
+### Games List (32 Total)
 
 #### Action Games (9)
-1. **Snake** - Classic snake game, eat & grow
-2. **Tetris** - Block stacking puzzle
-3. **Breakout** - Brick breaker with paddle
-4. **Space Invaders** - Alien shooter
-5. **Pong** - Classic paddle tennis
-6. **Flappy Bird** - Side-scroller obstacle game
-7. **Dino Run** - Chrome dinosaur-style runner
-8. **Asteroids** - Space rock shooter
-9. **Whack-A-Mole** - Reaction timing game
+1. Snake, Tetris, Breakout, Space Invaders, Pong, Flappy Bird, Dino Run, Asteroids, Whack-A-Mole
 
 #### Puzzle Games (6)
-10. **2048** - Number merging puzzle
-11. **Minesweeper** - Bomb avoidance logic game
-12. **Maze** - Navigate to find exit
-13. **Sliding Puzzle** - Classic number slider (3x3, 4x4, 5x5)
-14. **Sudoku** - Number placement (Easy/Med/Hard)
-15. **Riddles** - Brain teaser questions
+2. 2048, Minesweeper, Maze, Sliding Puzzle, Sudoku, Riddles
 
 #### Word Games (6)
-16. **Wordle** - 5-letter word guessing
-17. **Word Search** - Find hidden words in grid
-18. **Word Finder** - Unscramble letters
-19. **Crossword Mini** - Mini crossword puzzles
-20. **Hangman** - Category-based word guessing
-21. **Typing** - Speed typing challenge
+3. Wordle, Word Search, Word Finder, Crossword Mini, Hangman, Typing
 
-#### Memory & Quick Games (4)
-22. **Memory** - Card matching pairs
-23. **Simon** - Pattern repetition
-24. **Reaction** - Quick tap speed test
-25. **Color Match** - Match color names
+#### Strategy Games (4)
+4. Tic Tac Toe (AI), Connect Four (AI), Memory, Simon
+
+#### Casual Games (7)
+5. Bubble Pop, Rock Paper Scissors, Catch Game, Quiz Master, Clicker, Reaction, Color Match
 
 ## File Structure
 ```
 /app/frontend/src/
-├── App.js                 # Main app entry
-├── index.css              # Global styles (neon theme)
+├── App.js
+├── index.css (neon theme)
 ├── pages/
-│   └── Arcade.js          # Main hub with game grid
-└── games/
-    ├── SnakeGame.js
-    ├── TetrisGame.js
-    ├── BreakoutGame.js
-    ├── SpaceInvaders.js
-    ├── PongGame.js
-    ├── FlappyGame.js
-    ├── Game2048.js
-    ├── MemoryGame.js
-    ├── Minesweeper.js
-    ├── MazeGame.js
-    ├── RiddleGame.js
-    ├── SimonGame.js
-    ├── TypingGame.js
-    ├── WhackAMole.js
-    ├── DinoRun.js
-    ├── WordleGame.js
-    ├── AsteroidsGame.js
-    ├── ReactionGame.js
-    ├── ColorMatchGame.js
-    ├── WordSearchGame.js
-    ├── WordFinderGame.js
-    ├── SlidingPuzzle.js
-    ├── CrosswordMini.js
-    ├── SudokuGame.js
-    └── HangmanGame.js
+│   └── Arcade.js (main hub with hero & categories)
+└── games/ (32 game files)
 ```
 
-## Implementation Dates
-- **Dec 2025:** Initial 8 games created (Snake, Tetris, Breakout, Invaders, Pong, Flappy, 2048, Memory)
-- **Dec 2025:** Added 11 more games (Minesweeper, Maze, Riddle, Simon, Typing, Whack-A-Mole, Dino, Wordle, Asteroids, Reaction, Color Match)
-- **Dec 2025:** Added 6 puzzle/word games (Word Search, Word Finder, Sliding Puzzle, Crossword, Sudoku, Hangman)
-- **Dec 2025:** Renamed to "Mini Retro Arcade"
+## Implementation Timeline
+- **Dec 2025:** Initial 8 games
+- **Dec 2025:** Added 11 more games (total 19)
+- **Dec 2025:** Added 6 puzzle/word games (total 25)
+- **Jan 2026:** Added 7 more games + improved hero + category organization (total 32)
 
 ## Future Enhancements (Backlog)
 - [ ] Global online leaderboard system
-- [ ] 2-Player mode for Pong
+- [ ] 2-Player mode for games
 - [ ] Sound effects and background music
 - [ ] Achievement/badge system
 - [ ] Daily challenges
 - [ ] User accounts with cloud save
-- [ ] More game modes per game
 - [ ] Mobile app version
