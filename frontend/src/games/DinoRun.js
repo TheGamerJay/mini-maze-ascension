@@ -145,21 +145,56 @@ const DinoRun = ({ onScore, highScore, soundEnabled }) => {
       ctx.stroke();
     }
 
-    // Dino
+    // T-REX
+    const tx = 50;
+    const ty = dino.y;
     ctx.fillStyle = '#00ff00';
-    ctx.fillRect(50, dino.y, DINO_WIDTH, DINO_HEIGHT);
     
-    // Dino eye
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(75, dino.y + 8, 8, 8);
+    // Body
+    ctx.fillRect(tx + 5, ty + 15, 25, 20);
+    
+    // Head
+    ctx.beginPath();
+    ctx.ellipse(tx + 30, ty + 12, 15, 10, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Jaw/Mouth
+    ctx.fillRect(tx + 35, ty + 8, 12, 8);
+    
+    // Eye
+    ctx.fillStyle = '#ff0000';
+    ctx.beginPath();
+    ctx.arc(tx + 32, ty + 8, 3, 0, Math.PI * 2);
+    ctx.fill();
     ctx.fillStyle = '#000';
-    ctx.fillRect(78, dino.y + 10, 4, 4);
-
-    // Dino legs (animated)
+    ctx.beginPath();
+    ctx.arc(tx + 33, ty + 8, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Arms (tiny T-Rex arms!)
+    ctx.fillStyle = '#00ff00';
+    ctx.fillRect(tx + 25, ty + 18, 6, 4);
+    
+    // Legs (animated)
     const legOffset = Math.sin(Date.now() / 50) * 3;
     ctx.fillStyle = '#00cc00';
-    ctx.fillRect(55, dino.y + DINO_HEIGHT - 5, 8, 5 + (dino.jumping ? 0 : legOffset));
-    ctx.fillRect(72, dino.y + DINO_HEIGHT - 5, 8, 5 - (dino.jumping ? 0 : legOffset));
+    if (dino.jumping) {
+      // Legs together when jumping
+      ctx.fillRect(tx + 10, ty + 35, 8, 8);
+      ctx.fillRect(tx + 20, ty + 35, 8, 8);
+    } else {
+      // Running animation
+      ctx.fillRect(tx + 8, ty + 33, 8, 10 + legOffset);
+      ctx.fillRect(tx + 22, ty + 33, 8, 10 - legOffset);
+    }
+    
+    // Tail
+    ctx.fillStyle = '#00ff00';
+    ctx.beginPath();
+    ctx.moveTo(tx + 5, ty + 20);
+    ctx.lineTo(tx - 15, ty + 28);
+    ctx.lineTo(tx + 5, ty + 32);
+    ctx.fill();
 
     // Obstacles
     obstacles.forEach(obs => {
