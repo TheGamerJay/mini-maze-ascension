@@ -4,11 +4,10 @@ const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 300;
 
 const DINOS = [
-  { id: 'trex', name: 'T-REX', emoji: '🦖', color: '#00ff00', power: 20, speed: 3, size: 1.2, desc: 'King of destruction!' },
-  { id: 'raptor', name: 'RAPTOR', emoji: '🦎', color: '#ff8800', power: 12, speed: 5, size: 0.8, desc: 'Fast & agile!' },
-  { id: 'trike', name: 'TRICERATOPS', emoji: '🦏', color: '#00ffff', power: 25, speed: 2, size: 1.3, desc: 'Tank mode!' },
-  { id: 'ptero', name: 'PTERODACTYL', emoji: '🦅', color: '#ff00ff', power: 10, speed: 4, size: 0.7, desc: 'Can fly!' },
-  { id: 'stego', name: 'STEGOSAURUS', emoji: '🐊', color: '#ffff00', power: 18, speed: 2.5, size: 1.1, desc: 'Tail whip!' },
+  { id: 'trex', name: 'T-REX', emoji: '🦖', color: '#00ff00', power: 25, speed: 3, size: 1.2, desc: 'King of destruction!' },
+  { id: 'rhino', name: 'RHINO', emoji: '🦏', color: '#888888', power: 30, speed: 2, size: 1.3, desc: 'Unstoppable charge!' },
+  { id: 'croc', name: 'CROCODILE', emoji: '🐊', color: '#228B22', power: 20, speed: 3.5, size: 1.0, desc: 'Death roll!' },
+  { id: 'eagle', name: 'EAGLE', emoji: '🦅', color: '#8B4513', power: 15, speed: 5, size: 0.8, desc: 'Aerial assault!' },
 ];
 
 const Wrecker = ({ onScore, highScore }) => {
@@ -111,8 +110,8 @@ const Wrecker = ({ onScore, highScore }) => {
         let { x, y, vy, punching, punchFrame, flying } = prev;
         const onGround = y >= CANVAS_HEIGHT - 60 * dinoSize;
         
-        // Pterodactyl can fly
-        if (selectedDino.id === 'ptero') {
+        // Eagle can fly
+        if (selectedDino.id === 'eagle') {
           if (keys.ArrowUp || keys.w) {
             flying = true;
             vy = -3;
