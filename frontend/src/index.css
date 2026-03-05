@@ -378,3 +378,147 @@ input:focus {
     font-size: 20px;
   }
 }
+
+
+/* Toast Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.animate-slide-out {
+  animation: slideOut 0.3s ease-in forwards;
+}
+
+/* Confetti Burst Effect */
+@keyframes confettiBurst {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Sound Toggle Button Pulse */
+@keyframes soundPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(139, 92, 246, 0);
+  }
+}
+
+.sound-active {
+  animation: soundPulse 2s infinite;
+}
+
+/* Achievement Badge Glow */
+@keyframes achievementGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+  }
+}
+
+.achievement-glow {
+  animation: achievementGlow 1.5s ease-in-out infinite;
+}
+
+/* Streak Fire Animation */
+@keyframes fireFlicker {
+  0%, 100% {
+    transform: scale(1) rotate(-2deg);
+    filter: brightness(1);
+  }
+  25% {
+    transform: scale(1.05) rotate(1deg);
+    filter: brightness(1.1);
+  }
+  50% {
+    transform: scale(1) rotate(-1deg);
+    filter: brightness(1);
+  }
+  75% {
+    transform: scale(1.03) rotate(2deg);
+    filter: brightness(1.05);
+  }
+}
+
+.streak-fire {
+  animation: fireFlicker 0.5s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* New High Score Celebration */
+@keyframes newHighScore {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.new-high-score {
+  animation: newHighScore 0.6s ease-out;
+}
+
+/* Score Pop Animation */
+@keyframes scorePop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.score-pop {
+  animation: scorePop 0.3s ease-out;
+}

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { 
   Home, Trophy, Flame, Target, Clock, Gamepad2, 
   TrendingUp, Calendar, ChevronRight, Star, Zap,
-  Award, Gift, Play, RefreshCw, X
+  Award, Gift, Play, RefreshCw, X, CheckCircle
 } from 'lucide-react';
+import { getDailyChallenges, getChallengeProgress, getTodayXP } from '../utils/dailyChallenges';
+import { getStreakStatus, getCalendarData } from '../utils/streakTracker';
 
 const Dashboard = ({ 
   onClose, 
@@ -17,8 +19,23 @@ const Dashboard = ({
   const [dailyGame, setDailyGame] = useState(null);
   const [recentGames, setRecentGames] = useState([]);
   const [dailyCompleted, setDailyCompleted] = useState(false);
+  const [challenges, setChallenges] = useState([]);
+  const [streakData, setStreakData] = useState(null);
+  const [calendarData, setCalendarData] = useState([]);
 
   useEffect(() => {
+    // Load daily challenges
+    const dailyChallenges = getDailyChallenges();
+    setChallenges(dailyChallenges);
+    
+    // Load streak data
+    const streak = getStreakStatus();
+    setStreakData(streak);
+    
+    // Load calendar data
+    const calendar = getCalendarData(7);
+    setCalendarData(calendar);
+    
     // Get daily challenge game (changes daily based on date)
     const today = new Date().toDateString();
     const savedDaily = localStorage.getItem('miniArcadeDailyGame');
@@ -169,10 +186,82 @@ const Dashboard = ({
           </div>
           <div className="bg-black/30 rounded-xl p-3 border border-[#333] text-center">
             <Flame className="w-5 h-5 text-[#ff8800] mx-auto mb-1" />
-            <p className="text-[#ff8800] text-lg font-bold">{localStorage.getItem('miniArcadeStreak') || 0}</p>
+            <p className="text-[#ff8800] text-lg font-bold">{streakData?.currentStreak || 0}</p>
             <p className="text-[8px] text-[#888]">DAY STREAK</p>
           </div>
         </div>
+
+        {/* Week Calendar */}
+        {calendarData.length > 0 && (
+          <div className="bg-black/30 rounded-xl p-4 border border-[#333] mb-6">
+            <h3 className="text-[#ff8800] text-sm mb-3 flex items-center gap-2">
+              <Calendar className="w-4 h-4" /> THIS WEEK
+            </h3>
+            <div className="flex justify-between">
+              {calendarData.map((day, i) => (
+                <div key={i} className="text-center">
+                  <p className="text-[10px] text-[#888] mb-1">{day.dayName}</p>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                    day.isToday 
+                      ? 'bg-[#ff8800] text-black ring-2 ring-[#ff8800]/50' 
+                      : day.played 
+                        ? 'bg-[#00ff00]/20 text-[#00ff00] border border-[#00ff00]' 
+                        : 'bg-black/50 text-[#666] border border-[#333]'
+                  }`}>
+                    {day.played ? '✓' : day.dayNum}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Daily Challenges */}
+        {challenges.length > 0 && (
+          <div className="bg-black/30 rounded-xl p-4 border border-[#333] mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-[#ff00ff] text-sm flex items-center gap-2">
+                <Target className="w-4 h-4" /> DAILY CHALLENGES
+              </h3>
+              <span className="text-[#ff00ff] text-xs">+{getTodayXP()} XP earned</span>
+            </div>
+            <div className="space-y-2">
+              {challenges.map((challenge, i) => (
+                <div 
+                  key={i} 
+                  className={`flex items-center gap-3 p-3 rounded-lg border ${
+                    challenge.completed 
+                      ? 'bg-[#00ff00]/10 border-[#00ff00]/30' 
+                      : 'bg-black/30 border-[#333]'
+                  }`}
+                >
+                  <span className="text-2xl">{challenge.icon}</span>
+                  <div className="flex-1">
+                    <p className={`text-sm font-bold ${challenge.completed ? 'text-[#00ff00]' : 'text-white'}`}>
+                      {challenge.name}
+                    </p>
+                    <p className="text-[10px] text-[#888]">{challenge.desc}</p>
+                    {!challenge.completed && (
+                      <div className="mt-1 h-1.5 bg-black/50 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-gradient-to-r from-[#ff00ff] to-[#00ffff] transition-all"
+                          style={{ width: `${Math.min(100, (challenge.progress / challenge.target) * 100)}%` }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    {challenge.completed ? (
+                      <CheckCircle className="w-6 h-6 text-[#00ff00]" />
+                    ) : (
+                      <span className="text-[#ffff00] text-xs font-bold">+{challenge.xp} XP</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Recent Games */}
         {recentGames.length > 0 && (

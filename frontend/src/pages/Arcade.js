@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import SnakeGame from '../games/SnakeGame';
 import TetrisGame from '../games/TetrisGame';
 import BreakoutGame from '../games/BreakoutGame';
@@ -33,10 +33,16 @@ import QuizGame from '../games/QuizGame';
 import ClickerGame from '../games/ClickerGame';
 import MazeAscension from '../games/MazeAscension';
 import Wrecker from '../games/Wrecker';
-import { Gamepad2, Trophy, ArrowLeft, Zap, Brain, MessageSquare, Users, Star, Sparkles, Crown, Medal, Flame, User, Home, TrendingUp, Play } from 'lucide-react';
+import { Gamepad2, Trophy, ArrowLeft, Zap, Brain, MessageSquare, Users, Star, Sparkles, Crown, Medal, Flame, User, Home, TrendingUp, Play, Volume2, VolumeX } from 'lucide-react';
 import Leaderboard from '../components/Leaderboard';
 import ProfilePage from '../components/ProfilePage';
 import Dashboard from '../components/Dashboard';
+import { ToastProvider, useToast, showAchievementToast, showHighScoreToast, showStreakToast, showChallengeToast } from '../components/Toast';
+import { soundManager } from '../utils/sounds';
+import { createConfetti } from '../utils/confetti';
+import { updateStreak, getStreakStatus } from '../utils/streakTracker';
+import { checkAchievements, markAsNotified, getUnnotifiedAchievements, getAchievement } from '../utils/achievements';
+import { getDailyChallenges, updateChallengeProgress } from '../utils/dailyChallenges';
 
 const categories = [
   { id: 'all', name: 'All Games', icon: Sparkles, color: '#8b5cf6' },
@@ -93,15 +99,31 @@ const games = [
   { id: 'colormatch', name: 'Color Match', color: '#8b5cf6', icon: '🎨', desc: 'Match colors', category: 'casual' },
 ];
 
+// Main Arcade component wrapped with ToastProvider
 const Arcade = () => {
+  return (
+    <ToastProvider>
+      <ArcadeContent />
+    </ToastProvider>
+  );
+};
+
+const ArcadeContent = () => {
+  const { addToast } = useToast();
   const [currentGame, setCurrentGame] = useState(null);
   const [highScores, setHighScores] = useState({});
-  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [soundEnabled, setSoundEnabled] = useState(() => {
+    const saved = localStorage.getItem('miniArcadeSettings');
+    return saved ? JSON.parse(saved).sound !== false : true;
+  });
   const [showScores, setShowScores] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [streak, setStreak] = useState(0);
+  const [todayScoreTotal, setTodayScoreTotal] = useState(0);
+  const [todayGamesPlayed, setTodayGamesPlayed] = useState(new Set());
   const [playerProfile, setPlayerProfile] = useState(() => {
     const saved = localStorage.getItem('miniArcadeProfile');
     return saved ? JSON.parse(saved) : { name: 'Player', avatar: '🎮', country: '🌍' };
@@ -109,25 +131,135 @@ const Arcade = () => {
 
   const featuredGames = games.filter(g => g.featured);
 
+  // Initialize sound system and check streak on mount
+  useEffect(() => {
+    soundManager.init();
+    
+    // Check and update streak
+    const streakResult = updateStreak();
+    setStreak(streakResult.currentStreak);
+    
+    // Show streak toast if streak increased
+    if (streakResult.streakIncreased && streakResult.currentStreak > 1) {
+      setTimeout(() => {
+        showStreakToast(addToast, streakResult.currentStreak);
+        if (soundEnabled) soundManager.playLevelUp();
+      }, 1000);
+    }
+    
+    // Check for any unnotified achievements
+    const unnotified = getUnnotifiedAchievements();
+    unnotified.forEach((id, index) => {
+      const achievement = getAchievement(id);
+      if (achievement) {
+        setTimeout(() => {
+          showAchievementToast(addToast, achievement);
+          markAsNotified(id);
+          if (soundEnabled) soundManager.playAchievement();
+        }, 2000 + index * 1500);
+      }
+    });
+  }, []);
+
+  // Load high scores
   useEffect(() => {
     const saved = localStorage.getItem('miniRetroArcadeScores');
     if (saved) setHighScores(JSON.parse(saved));
   }, []);
 
-  const updateHighScore = (gameId, score) => {
+  // Resume audio context on user interaction
+  useEffect(() => {
+    const handleInteraction = () => {
+      soundManager.resume();
+    };
+    document.addEventListener('click', handleInteraction, { once: true });
+    return () => document.removeEventListener('click', handleInteraction);
+  }, []);
+
+  const updateHighScore = useCallback((gameId, score) => {
+    // Play score sound
+    if (soundEnabled) soundManager.playScore();
+    
+    // Update recent games
     const recent = JSON.parse(localStorage.getItem('miniArcadeRecentGames') || '[]');
     const updatedRecent = [gameId, ...recent.filter(id => id !== gameId)].slice(0, 10);
     localStorage.setItem('miniArcadeRecentGames', JSON.stringify(updatedRecent));
+    
+    // Update sessions
     const sessions = parseInt(localStorage.getItem('miniArcadeSessions') || '0') + 1;
     localStorage.setItem('miniArcadeSessions', sessions.toString());
+    
+    // Track today's progress
+    const newTodayGames = new Set(todayGamesPlayed);
+    newTodayGames.add(gameId);
+    setTodayGamesPlayed(newTodayGames);
+    setTodayScoreTotal(prev => prev + score);
+    
+    // Update daily challenges
+    const completedChallenges = updateChallengeProgress(gameId, score, todayScoreTotal + score, newTodayGames.size);
+    completedChallenges.forEach((challenge, index) => {
+      setTimeout(() => {
+        showChallengeToast(addToast, challenge);
+        if (soundEnabled) soundManager.playSuccess();
+      }, 500 + index * 1000);
+    });
+    
+    // Check for new high score
     const current = highScores[gameId] || 0;
-    if (score > current) {
+    const isNewHighScore = score > current;
+    
+    if (isNewHighScore) {
       const newScores = { ...highScores, [gameId]: score };
       setHighScores(newScores);
       localStorage.setItem('miniRetroArcadeScores', JSON.stringify(newScores));
+      
+      // Celebrate new high score!
+      const game = games.find(g => g.id === gameId);
+      showHighScoreToast(addToast, game?.name || gameId, score);
+      if (soundEnabled) soundManager.playNewHighScore();
+      createConfetti();
+      
+      // Check achievements with new scores
+      const totalScore = Object.values(newScores).reduce((a, b) => a + b, 0);
+      const gamesPlayed = Object.keys(newScores).length;
+      const streakData = getStreakStatus();
+      
+      const newAchievements = checkAchievements({
+        totalScore,
+        gamesPlayed,
+        streak: streakData.currentStreak,
+        highScores: newScores,
+        playHistory: streakData.playHistory,
+      });
+      
+      newAchievements.forEach((achievement, index) => {
+        setTimeout(() => {
+          showAchievementToast(addToast, achievement);
+          markAsNotified(achievement.id);
+          if (soundEnabled) soundManager.playAchievement();
+        }, 1500 + index * 1500);
+      });
+      
       return true;
     }
+    
     return false;
+  }, [highScores, soundEnabled, addToast, todayScoreTotal, todayGamesPlayed]);
+
+  // Toggle sound
+  const toggleSound = () => {
+    const newSoundEnabled = !soundEnabled;
+    setSoundEnabled(newSoundEnabled);
+    const settings = JSON.parse(localStorage.getItem('miniArcadeSettings') || '{}');
+    settings.sound = newSoundEnabled;
+    localStorage.setItem('miniArcadeSettings', JSON.stringify(settings));
+    if (newSoundEnabled) soundManager.playClick();
+  };
+
+  // Play click sound on button interactions
+  const handleButtonClick = (callback) => {
+    if (soundEnabled) soundManager.playClick();
+    callback();
   };
 
   const RANKS = [
@@ -253,25 +385,36 @@ const Arcade = () => {
             </div>
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setShowDashboard(true)}
+                onClick={() => handleButtonClick(() => setShowDashboard(true))}
                 className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-all"
                 data-testid="open-dashboard-btn"
               >
                 <Home className="w-5 h-5" />
               </button>
               <button
-                onClick={() => setShowLeaderboard(true)}
+                onClick={() => handleButtonClick(() => setShowLeaderboard(true))}
                 className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-all"
                 data-testid="open-leaderboard-btn"
               >
                 <Trophy className="w-5 h-5" />
               </button>
               <button
-                onClick={() => setShowProfile(true)}
+                onClick={() => handleButtonClick(() => setShowProfile(true))}
                 className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-all"
                 data-testid="open-profile-btn"
               >
                 <User className="w-5 h-5" />
+              </button>
+              <button
+                onClick={toggleSound}
+                className={`p-2.5 rounded-xl border transition-all ${
+                  soundEnabled 
+                    ? 'bg-purple-500/20 border-purple-500/50 text-purple-400' 
+                    : 'bg-white/5 border-white/10 text-white/30'
+                }`}
+                data-testid="toggle-sound-btn"
+              >
+                {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
               </button>
             </div>
           </div>
@@ -328,6 +471,11 @@ const Arcade = () => {
                   <p className="text-[10px] text-white/40">Played</p>
                 </div>
                 <div className="stat-card min-w-[100px]">
+                  <Flame className="w-5 h-5 text-orange-500 mx-auto mb-1" />
+                  <p className="stat-value text-orange-400">{streak}</p>
+                  <p className="text-[10px] text-white/40">Day Streak</p>
+                </div>
+                <div className="stat-card min-w-[100px]">
                   <TrendingUp className="w-5 h-5 text-green-500 mx-auto mb-1" />
                   <p className="stat-value text-green-400">#{Math.max(1, 21 - Math.floor(totalScore / 5000))}</p>
                   <p className="text-[10px] text-white/40">Rank</p>
@@ -345,7 +493,7 @@ const Arcade = () => {
               {featuredGames.slice(0, 6).map(game => (
                 <button
                   key={game.id}
-                  onClick={() => setCurrentGame(game.id)}
+                  onClick={() => handleButtonClick(() => setCurrentGame(game.id))}
                   className="glass-card glass-card-hover p-4 text-left group"
                   data-testid={`featured-${game.id}`}
                 >
@@ -395,7 +543,7 @@ const Arcade = () => {
           {filteredGames.map(game => (
             <button
               key={game.id}
-              onClick={() => setCurrentGame(game.id)}
+              onClick={() => handleButtonClick(() => setCurrentGame(game.id))}
               className="game-card text-left group"
               data-testid={`game-${game.id}`}
             >
