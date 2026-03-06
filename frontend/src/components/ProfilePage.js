@@ -98,8 +98,8 @@ const ProfilePage = ({
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 500000) {
-        alert('Image too large! Please use an image under 500KB.');
+      if (file.size > 1000000) {
+        alert('Image too large! Please use an image under 1MB.');
         return;
       }
       const reader = new FileReader();
@@ -282,7 +282,7 @@ const ProfilePage = ({
                       <Upload className="w-5 h-5 text-[#00ffff]" />
                       <span className="text-[#00ffff] text-sm">Upload Image</span>
                     </button>
-                    <p className="text-[#666] text-[10px] text-center">Max 500KB • JPG, PNG, GIF</p>
+                    <p className="text-[#666] text-[10px] text-center">Max 1MB • JPG, PNG, GIF</p>
                   </div>
                 )}
               </div>
